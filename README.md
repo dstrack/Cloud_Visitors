@@ -19,11 +19,14 @@ at least Oracle Database Express Edition 18c
 	Environment / Encoding = UTF-8
 
 3. At the demo sites:
+
 Execute the script file cloud_visitors_utl.sql
+
 The packages procedure cloud_visitors_utl.Define_RESTful_Service will be executed to install the REST endpoint.
 In the view CLOUD_VISITORS_V, the visitor activity is selected from APEX_WORKSPACE_ACTIVITY_LOG, it is then grouped by session login_date, ip_address, application, and page. The performed requests and time spend is aggregated.
 
 4. In your localhost:
+
 Install the application in your local APEX development environment. Then go the Shared Components\Web Source Modules to edit the modules. The module IP_Geolocation is used to lookup the geolocations of your visitor's IP addresses and should not be removed. Remove the example modules and add modules for your demo sites.
 The app enables you to choose the name of a web source module for a visitor's report.
 
