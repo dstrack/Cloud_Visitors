@@ -27,7 +27,7 @@ prompt APPLICATION 2050 - Cloud Visitors
 -- Application Export:
 --   Application:     2050
 --   Name:            Cloud Visitors
---   Date and Time:   19:45 Monday May 4, 2020
+--   Date and Time:   23:49 Friday May 22, 2020
 --   Exported By:     DIRK
 --   Flashback:       0
 --   Export Type:     Application Export
@@ -104,7 +104,7 @@ wwv_flow_api.create_flow(
 ,p_public_user=>'APEX_PUBLIC_USER'
 ,p_proxy_server=>nvl(wwv_flow_application_install.get_proxy,'')
 ,p_no_proxy_domains=>nvl(wwv_flow_application_install.get_no_proxy_domains,'')
-,p_flow_version=>'Release 1.0'
+,p_flow_version=>'Release 1.1'
 ,p_flow_status=>'AVAILABLE_W_EDIT_LINK'
 ,p_flow_unavailable_text=>'This application is currently unavailable at this time.'
 ,p_exact_substitutions_only=>'Y'
@@ -116,7 +116,7 @@ wwv_flow_api.create_flow(
 ,p_substitution_string_01=>'APP_NAME'
 ,p_substitution_value_01=>'Cloud Visitors'
 ,p_last_updated_by=>'DIRK'
-,p_last_upd_yyyymmddhh24miss=>'20200504194025'
+,p_last_upd_yyyymmddhh24miss=>'20200522234901'
 ,p_file_prefix => nvl(wwv_flow_application_install.get_static_app_file_prefix,'')
 ,p_files_version=>3
 ,p_ui_type_name => null
@@ -10753,10 +10753,12 @@ wwv_flow_api.create_page_plug(
 ,p_plug_display_point=>'BODY'
 ,p_location=>'WEB_SOURCE'
 ,p_web_src_module_id=>wwv_flow_api.id(156733630047645632)
+,p_query_type=>'SQL'
 ,p_plug_source_type=>'NATIVE_IR'
 ,p_plug_query_options=>'DERIVED_REPORT_COLUMNS'
 ,p_plug_caching=>'CACHE'
 ,p_plug_caching_max_age_in_sec=>3600
+,p_plug_cache_depends_on_items=>'APP_REQUEST_DATA_HASH'
 );
 wwv_flow_api.create_worksheet(
  p_id=>wwv_flow_api.id(13358757013985632)
@@ -11511,6 +11513,7 @@ wwv_flow_api.create_page_button(
 '    WHERE JOB_NAME LIKE Cloud_Visitors_Utl.Web_Module_Job_Name(:P4_WEB_SRC_MODULE) || ''%''',
 ')'))
 ,p_button_condition_type=>'EXISTS'
+,p_grid_new_grid=>false
 );
 wwv_flow_api.create_page_button(
  p_id=>wwv_flow_api.id(13558105051724202)
@@ -11528,6 +11531,7 @@ wwv_flow_api.create_page_button(
 'WHERE JOB_NAME LIKE Cloud_Visitors_Utl.Web_Module_Job_Name(:P4_WEB_SRC_MODULE) || ''%''',
 'and :P4_WEB_SRC_MODULE IS NOT NULL'))
 ,p_button_condition_type=>'EXISTS'
+,p_grid_new_grid=>false
 );
 wwv_flow_api.create_page_button(
  p_id=>wwv_flow_api.id(152953458871349401)
@@ -11543,6 +11547,7 @@ wwv_flow_api.create_page_button(
 ,p_button_position=>'BELOW_BOX'
 ,p_button_condition=>'P4_WEB_SRC_MODULE'
 ,p_button_condition_type=>'ITEM_IS_NOT_NULL'
+,p_grid_new_grid=>false
 );
 wwv_flow_api.create_page_button(
  p_id=>wwv_flow_api.id(176133729509311302)
@@ -11554,6 +11559,7 @@ wwv_flow_api.create_page_button(
 ,p_button_template_id=>wwv_flow_api.id(13313107495914101)
 ,p_button_image_alt=>'Ignore IP-Address'
 ,p_button_position=>'RIGHT_OF_IR_SEARCH_BAR'
+,p_grid_new_grid=>false
 );
 wwv_flow_api.create_page_item(
  p_id=>wwv_flow_api.id(156753343619030703)
@@ -11599,6 +11605,7 @@ wwv_flow_api.create_page_da_action(
 ,p_action=>'NATIVE_SUBMIT_PAGE'
 ,p_attribute_01=>'WEB_SRC_MODULE'
 ,p_attribute_02=>'Y'
+,p_stop_execution_on_error=>'Y'
 );
 wwv_flow_api.create_page_process(
  p_id=>wwv_flow_api.id(13558282192724203)
@@ -11759,6 +11766,7 @@ wwv_flow_api.create_page_plug(
 ,p_plug_display_point=>'BODY'
 ,p_location=>'WEB_SOURCE'
 ,p_web_src_module_id=>wwv_flow_api.id(151095916907358988)
+,p_query_type=>'SQL'
 ,p_plug_source_type=>'NATIVE_IR'
 ,p_plug_query_options=>'DERIVED_REPORT_COLUMNS'
 ,p_plug_display_condition_type=>'ITEM_IS_NOT_NULL'
@@ -11771,6 +11779,7 @@ wwv_flow_api.create_worksheet(
 ,p_no_data_found_message=>'No data found.'
 ,p_show_nulls_as=>'-'
 ,p_show_search_bar=>'N'
+,p_report_list_mode=>'TABS'
 ,p_show_detail_link=>'N'
 ,p_owner=>'DIRK'
 ,p_internal_uid=>151131495474274717
@@ -12023,6 +12032,7 @@ wwv_flow_api.create_interactive_grid(
 ,p_requires_filter=>false
 ,p_show_nulls_as=>'-'
 ,p_select_first_row=>true
+,p_fixed_row_height=>true
 ,p_pagination_type=>'SCROLL'
 ,p_show_total_row_count=>true
 ,p_show_toolbar=>true
@@ -12103,6 +12113,7 @@ wwv_flow_api.create_page_button(
 ,p_button_is_hot=>'Y'
 ,p_button_image_alt=>'Submit'
 ,p_button_position=>'BODY'
+,p_grid_new_grid=>false
 ,p_grid_new_row=>'N'
 ,p_grid_new_column=>'Y'
 ,p_grid_column_span=>2
@@ -12418,6 +12429,7 @@ wwv_flow_api.create_page_da_action(
 ,p_action=>'NATIVE_REFRESH'
 ,p_affected_elements_type=>'REGION'
 ,p_affected_region_id=>wwv_flow_api.id(13375983895652313)
+,p_stop_execution_on_error=>'Y'
 );
 end;
 /
@@ -12608,7 +12620,7 @@ wwv_flow_api.create_install(
 '    end loop;',
 '    commit;',
 'end;',
-'',
+'/',
 'DROP VIEW CLOUD_VISITORS_V;',
 'DROP TABLE CLOUD_VISITORS;',
 'DROP TABLE CLOUD_VISITORS_IP_BLACK_LIST;',
