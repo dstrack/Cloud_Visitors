@@ -27,7 +27,7 @@ prompt APPLICATION 2050 - Cloud Visitors
 -- Application Export:
 --   Application:     2050
 --   Name:            Cloud Visitors
---   Date and Time:   23:49 Friday May 22, 2020
+--   Date and Time:   23:07 Wednesday June 17, 2020
 --   Exported By:     DIRK
 --   Flashback:       0
 --   Export Type:     Application Export
@@ -116,7 +116,7 @@ wwv_flow_api.create_flow(
 ,p_substitution_string_01=>'APP_NAME'
 ,p_substitution_value_01=>'Cloud Visitors'
 ,p_last_updated_by=>'DIRK'
-,p_last_upd_yyyymmddhh24miss=>'20200522234901'
+,p_last_upd_yyyymmddhh24miss=>'20200617215203'
 ,p_file_prefix => nvl(wwv_flow_application_install.get_static_app_file_prefix,'')
 ,p_files_version=>3
 ,p_ui_type_name => null
@@ -133,20 +133,6 @@ wwv_flow_api.create_remote_server(
 ,p_https_host=>nvl(wwv_flow_application_install.get_remote_server_https_host('Oracle_Cloud_strack_dev02'),'')
 ,p_server_type=>'WEB_SERVICE'
 ,p_ords_timezone=>nvl(wwv_flow_application_install.get_remote_server_ords_tz('Oracle_Cloud_strack_dev02'),'')
-,p_prompt_on_install=>false
-);
-end;
-/
-prompt --application/shared_components/remote_servers/strack_software_dev
-begin
-wwv_flow_api.create_remote_server(
- p_id=>wwv_flow_api.id(23291326538210453)
-,p_name=>'strack-software.dev'
-,p_static_id=>'strack_software_dev'
-,p_base_url=>nvl(wwv_flow_application_install.get_remote_server_base_url('strack_software_dev'),'https://strack-software.oracleapexservices.com/apex/strack_dev/')
-,p_https_host=>nvl(wwv_flow_application_install.get_remote_server_https_host('strack_software_dev'),'')
-,p_server_type=>'WEB_SERVICE'
-,p_ords_timezone=>nvl(wwv_flow_application_install.get_remote_server_ords_tz('strack_software_dev'),'')
 ,p_prompt_on_install=>false
 );
 end;
@@ -176,150 +162,6 @@ wwv_flow_api.create_remote_server(
 ,p_server_type=>'WEB_SERVICE'
 ,p_ords_timezone=>nvl(wwv_flow_application_install.get_remote_server_ords_tz('api_db_ip_com_location'),'')
 ,p_prompt_on_install=>false
-);
-end;
-/
-prompt --application/shared_components/data_profiles/data_browser_visitors_source
-begin
-wwv_flow_api.create_data_profile(
- p_id=>wwv_flow_api.id(13349354165953422)
-,p_name=>'Data Browser Visitors Source'
-,p_format=>'JSON'
-,p_row_selector=>'items'
-);
-wwv_flow_api.create_data_profile_col(
- p_id=>wwv_flow_api.id(13349580353953423)
-,p_data_profile_id=>wwv_flow_api.id(13349354165953422)
-,p_name=>'AGENT'
-,p_sequence=>10
-,p_data_type=>'VARCHAR2'
-,p_max_length=>4000
-,p_has_time_zone=>false
-,p_selector=>'agent'
-);
-wwv_flow_api.create_data_profile_col(
- p_id=>wwv_flow_api.id(13349953730953423)
-,p_data_profile_id=>wwv_flow_api.id(13349354165953422)
-,p_name=>'LOGIN_CNT'
-,p_sequence=>20
-,p_data_type=>'NUMBER'
-,p_has_time_zone=>false
-,p_selector=>'login_cnt'
-);
-wwv_flow_api.create_data_profile_col(
- p_id=>wwv_flow_api.id(13350377062953423)
-,p_data_profile_id=>wwv_flow_api.id(13349354165953422)
-,p_name=>'IP_ADDRESS'
-,p_sequence=>30
-,p_data_type=>'VARCHAR2'
-,p_max_length=>4000
-,p_has_time_zone=>false
-,p_selector=>'ip_address'
-);
-wwv_flow_api.create_data_profile_col(
- p_id=>wwv_flow_api.id(13350712639953423)
-,p_data_profile_id=>wwv_flow_api.id(13349354165953422)
-,p_name=>'LAST_LOGIN_DATE'
-,p_sequence=>40
-,p_data_type=>'VARCHAR2'
-,p_max_length=>4000
-,p_has_time_zone=>false
-,p_selector=>'last_login_date'
-);
-wwv_flow_api.create_data_profile_col(
- p_id=>wwv_flow_api.id(29097376625385235)
-,p_data_profile_id=>wwv_flow_api.id(13349354165953422)
-,p_name=>'PAGES'
-,p_sequence=>50
-,p_data_type=>'VARCHAR2'
-,p_max_length=>4000
-,p_has_time_zone=>false
-,p_selector=>'pages'
-);
-wwv_flow_api.create_data_profile_col(
- p_id=>wwv_flow_api.id(29098455789385236)
-,p_data_profile_id=>wwv_flow_api.id(13349354165953422)
-,p_name=>'APPLICATION_ID'
-,p_sequence=>60
-,p_data_type=>'NUMBER'
-,p_has_time_zone=>false
-,p_selector=>'application_id'
-);
-wwv_flow_api.create_data_profile_col(
- p_id=>wwv_flow_api.id(29134330827250978)
-,p_data_profile_id=>wwv_flow_api.id(13349354165953422)
-,p_name=>'PAGE_ID'
-,p_sequence=>70
-,p_data_type=>'NUMBER'
-,p_has_time_zone=>false
-,p_selector=>'page_id'
-);
-wwv_flow_api.create_data_profile_col(
- p_id=>wwv_flow_api.id(29135077087250978)
-,p_data_profile_id=>wwv_flow_api.id(13349354165953422)
-,p_name=>'GROUP_NAME'
-,p_sequence=>80
-,p_data_type=>'VARCHAR2'
-,p_max_length=>4000
-,p_has_time_zone=>false
-,p_selector=>'group_name'
-);
-wwv_flow_api.create_data_profile_col(
- p_id=>wwv_flow_api.id(29136624021250979)
-,p_data_profile_id=>wwv_flow_api.id(13349354165953422)
-,p_name=>'APPLICATION_NAME'
-,p_sequence=>90
-,p_data_type=>'VARCHAR2'
-,p_max_length=>4000
-,p_has_time_zone=>false
-,p_selector=>'application_name'
-);
-wwv_flow_api.create_data_profile_col(
- p_id=>wwv_flow_api.id(151210927605176457)
-,p_data_profile_id=>wwv_flow_api.id(13349354165953422)
-,p_name=>'CNT'
-,p_sequence=>100
-,p_data_type=>'NUMBER'
-,p_has_time_zone=>false
-,p_selector=>'cnt'
-);
-wwv_flow_api.create_data_profile_col(
- p_id=>wwv_flow_api.id(151212410778176466)
-,p_data_profile_id=>wwv_flow_api.id(13349354165953422)
-,p_name=>'PAGE_NAME'
-,p_sequence=>110
-,p_data_type=>'VARCHAR2'
-,p_max_length=>4000
-,p_has_time_zone=>false
-,p_selector=>'page_name'
-);
-wwv_flow_api.create_data_profile_col(
- p_id=>wwv_flow_api.id(151213605254176466)
-,p_data_profile_id=>wwv_flow_api.id(13349354165953422)
-,p_name=>'ELAPSED_TIME'
-,p_sequence=>120
-,p_data_type=>'NUMBER'
-,p_has_time_zone=>false
-,p_selector=>'elapsed_time'
-);
-wwv_flow_api.create_data_profile_col(
- p_id=>wwv_flow_api.id(151214075100176466)
-,p_data_profile_id=>wwv_flow_api.id(13349354165953422)
-,p_name=>'DURATION_MINS'
-,p_sequence=>130
-,p_data_type=>'NUMBER'
-,p_has_time_zone=>false
-,p_selector=>'duration_mins'
-);
-wwv_flow_api.create_data_profile_col(
- p_id=>wwv_flow_api.id(169830286890008602)
-,p_data_profile_id=>wwv_flow_api.id(13349354165953422)
-,p_name=>'REQUESTS'
-,p_sequence=>131
-,p_data_type=>'VARCHAR2'
-,p_max_length=>4000
-,p_has_time_zone=>false
-,p_selector=>'requests'
 );
 end;
 /
@@ -538,34 +380,6 @@ wwv_flow_api.create_data_profile_col(
 );
 end;
 /
-prompt --application/shared_components/web_sources/strack_software_dev_app_visitors
-begin
-wwv_flow_api.create_web_source_module(
- p_id=>wwv_flow_api.id(13351100170953424)
-,p_name=>'Strack-Software.dev App Visitors'
-,p_static_id=>'Strack_Software_dev_App_Visitors'
-,p_web_source_type=>'ORDS_3'
-,p_data_profile_id=>wwv_flow_api.id(13349354165953422)
-,p_remote_server_id=>wwv_flow_api.id(23291326538210453)
-,p_url_path_prefix=>'appvisitors/hol/'
-);
-wwv_flow_api.create_web_source_operation(
- p_id=>wwv_flow_api.id(13351401095953425)
-,p_web_src_module_id=>wwv_flow_api.id(13351100170953424)
-,p_operation=>'GET'
-,p_database_operation=>'FETCH_COLLECTION'
-,p_url_pattern=>'.'
-,p_allow_fetch_all_rows=>false
-);
-wwv_flow_api.create_web_source_operation(
- p_id=>wwv_flow_api.id(13351936814965004)
-,p_web_src_module_id=>wwv_flow_api.id(13351100170953424)
-,p_operation=>'GET'
-,p_database_operation=>'FETCH_SINGLE_ROW'
-,p_url_pattern=>':ip_address'
-);
-end;
-/
 prompt --application/shared_components/web_sources/ip_geolocation
 begin
 wwv_flow_api.create_web_source_module(
@@ -691,8 +505,7 @@ wwv_flow_api.create_list_item(
 ,p_list_item_link_text=>unistr('Visitors \2013 Web Source')
 ,p_list_item_link_target=>'f?p=&APP_ID.:2:&SESSION.::&DEBUG.::::'
 ,p_list_item_icon=>'fa-cloud-user'
-,p_list_item_current_type=>'COLON_DELIMITED_PAGE_LIST'
-,p_list_item_current_for_pages=>'2,3'
+,p_list_item_current_type=>'TARGET_PAGE'
 );
 wwv_flow_api.create_list_item(
  p_id=>wwv_flow_api.id(13375585404652310)
@@ -10741,7 +10554,7 @@ wwv_flow_api.create_page(
 ,p_page_template_options=>'#DEFAULT#'
 ,p_protection_level=>'C'
 ,p_last_updated_by=>'DIRK'
-,p_last_upd_yyyymmddhh24miss=>'20200501110102'
+,p_last_upd_yyyymmddhh24miss=>'20200617214935'
 );
 wwv_flow_api.create_page_plug(
  p_id=>wwv_flow_api.id(13358364503985632)
@@ -10769,10 +10582,8 @@ wwv_flow_api.create_worksheet(
 ,p_pagination_type=>'ROWS_X_TO_Y'
 ,p_pagination_display_pos=>'BOTTOM_RIGHT'
 ,p_report_list_mode=>'TABS'
-,p_show_detail_link=>'C'
+,p_show_detail_link=>'N'
 ,p_download_formats=>'CSV:HTML:EMAIL:XLS:PDF:RTF'
-,p_detail_link=>'f?p=&APP_ID.:3:&SESSION.::&DEBUG.:RP:P3_IP_ADDRESS:\#IP_ADDRESS#\'
-,p_detail_link_text=>'<span aria-label="Edit"><span class="fa fa-edit" aria-hidden="true" title="Edit"></span></span>'
 ,p_owner=>'DIRK'
 ,p_internal_uid=>13358757013985632
 );
@@ -11044,7 +10855,7 @@ wwv_flow_api.create_page(
 ,p_autocomplete_on_off=>'OFF'
 ,p_page_template_options=>'#DEFAULT#'
 ,p_last_updated_by=>'DIRK'
-,p_last_upd_yyyymmddhh24miss=>'20200504110753'
+,p_last_upd_yyyymmddhh24miss=>'20200617214710'
 );
 wwv_flow_api.create_page_plug(
  p_id=>wwv_flow_api.id(13555346716723078)
@@ -11093,7 +10904,7 @@ wwv_flow_api.create_page_plug(
 ' where WEB_MODULE_ID = :P4_WEB_SRC_MODULE',
 'and NOT EXISTS (',
 '    select 1',
-'    from CLOUD_VISITORS_IP_BLACK_LIST S',
+'    from CLOUD_VISITORS_EXCLUDED_IP_LIST S',
 '    where T.IP_ADDRESS LIKE S.IP_ADDRESS || ''%''',
 ')'))
 ,p_plug_source_type=>'NATIVE_IR'
@@ -11719,12 +11530,12 @@ wwv_flow_api.create_page_process(
 ,p_process_name=>'Save Ignored IP-Adrress'
 ,p_process_sql_clob=>wwv_flow_string.join(wwv_flow_t_varchar2(
 'FOR I in 1..APEX_APPLICATION.G_F01.COUNT LOOP',
-'    INSERT INTO CLOUD_VISITORS_IP_BLACK_LIST (IP_ADDRESS)',
+'    INSERT INTO CLOUD_VISITORS_EXCLUDED_IP_LIST (IP_ADDRESS)',
 '    SELECT APEX_APPLICATION.G_F01(i) ',
 '    FROM DUAL ',
 '    WHERE NOT EXISTS (',
 '        SELECT 1',
-'        FROM CLOUD_VISITORS_IP_BLACK_LIST S',
+'        FROM CLOUD_VISITORS_EXCLUDED_IP_LIST S',
 '        WHERE APEX_APPLICATION.G_F01(i) LIKE S.IP_ADDRESS || ''%''',
 '    );',
 'END LOOP;'))
@@ -11743,7 +11554,7 @@ wwv_flow_api.create_page(
 ,p_autocomplete_on_off=>'OFF'
 ,p_page_template_options=>'#DEFAULT#'
 ,p_last_updated_by=>'DIRK'
-,p_last_upd_yyyymmddhh24miss=>'20200504002904'
+,p_last_upd_yyyymmddhh24miss=>'20200617214719'
 );
 wwv_flow_api.create_page_plug(
  p_id=>wwv_flow_api.id(151123556451226304)
@@ -11904,7 +11715,7 @@ wwv_flow_api.create_page_plug(
 ,p_plug_display_point=>'BODY'
 ,p_plug_source=>wwv_flow_string.join(wwv_flow_t_varchar2(
 'select ID, IP_ADDRESS, CREATED_AT, CREATED_BY',
-'from CLOUD_VISITORS_IP_BLACK_LIST'))
+'from CLOUD_VISITORS_EXCLUDED_IP_LIST'))
 ,p_plug_source_type=>'NATIVE_IG'
 ,p_plug_query_options=>'DERIVED_REPORT_COLUMNS'
 ,p_plug_header=>'IP addresses that are excluded from the Cloud Visitors reports.'
@@ -11922,7 +11733,7 @@ wwv_flow_api.create_region_column(
 ,p_display_sequence=>50
 ,p_value_alignment=>'LEFT'
 ,p_attribute_05=>'BOTH'
-,p_is_required=>false
+,p_is_required=>true
 ,p_max_length=>512
 ,p_enable_filter=>true
 ,p_filter_operators=>'C'
@@ -12176,7 +11987,7 @@ wwv_flow_api.create_page(
 ,p_autocomplete_on_off=>'OFF'
 ,p_page_template_options=>'#DEFAULT#'
 ,p_last_updated_by=>'DIRK'
-,p_last_upd_yyyymmddhh24miss=>'20200504012144'
+,p_last_upd_yyyymmddhh24miss=>'20200617214734'
 );
 wwv_flow_api.create_page_plug(
  p_id=>wwv_flow_api.id(13375983895652313)
@@ -12191,7 +12002,7 @@ wwv_flow_api.create_page_plug(
 'from table ( Cloud_Visitors_Utl.Pipe_app_visitor_rest(:P7_WEB_SRC_MODULE) ) T',
 'where NOT EXISTS (',
 '    select 1',
-'    from CLOUD_VISITORS_IP_BLACK_LIST S',
+'    from CLOUD_VISITORS_EXCLUDED_IP_LIST S',
 '    where T.IP_ADDRESS LIKE S.IP_ADDRESS || ''%''',
 ')'))
 ,p_plug_source_type=>'NATIVE_IR'
@@ -12607,6 +12418,16 @@ prompt --application/deployment/definition
 begin
 wwv_flow_api.create_install(
  p_id=>wwv_flow_api.id(13383693074261101)
+,p_welcome_message=>'This application installer will guide you through the process of creating your database objects and seed data.'
+,p_configuration_message=>'You can configure the following attributes of your application.'
+,p_build_options_message=>'You can choose to include the following build options.'
+,p_validation_message=>'The following validations will be performed to ensure your system is compatible with this application.'
+,p_install_message=>'Please confirm that you would like to install this application''s supporting objects.'
+,p_upgrade_message=>'The application installer has detected that this application''s supporting objects were previously installed.  This wizard will guide you through the process of upgrading these supporting objects.'
+,p_upgrade_confirm_message=>'Please confirm that you would like to install this application''s supporting objects.'
+,p_upgrade_success_message=>'Your application''s supporting objects have been installed.'
+,p_upgrade_failure_message=>'Installation of database objects and seed data has failed.'
+,p_deinstall_success_message=>'Deinstallation complete.'
 ,p_deinstall_script_clob=>wwv_flow_string.join(wwv_flow_t_varchar2(
 'begin',
 '    for c in (',
@@ -12623,7 +12444,7 @@ wwv_flow_api.create_install(
 '/',
 'DROP VIEW CLOUD_VISITORS_V;',
 'DROP TABLE CLOUD_VISITORS;',
-'DROP TABLE CLOUD_VISITORS_IP_BLACK_LIST;',
+'DROP TABLE CLOUD_VISITORS_EXCLUDED_IP_LIST;',
 'DROP SEQUENCE CLOUD_VISITORS_SEQ;',
 'DROP PACKAGE CLOUD_VISITORS_UTL;',
 ''))
@@ -12671,7 +12492,7 @@ wwv_flow_api.create_install_script(
 '/',
 'DROP VIEW CLOUD_VISITORS_V;',
 'DROP TABLE CLOUD_VISITORS;',
-'DROP TABLE CLOUD_VISITORS_IP_BLACK_LIST;',
+'DROP TABLE CLOUD_VISITORS_EXCLUDED_IP_LIST;',
 'DROP SEQUENCE CLOUD_VISITORS_SEQ;',
 'DROP PACKAGE CLOUD_VISITORS_UTL;',
 '',
@@ -12795,10 +12616,10 @@ wwv_flow_api.create_install_script(
 '    end if; ',
 '',
 '    SELECT COUNT(*) INTO v_Count',
-'    from sys.user_tables where table_name = ''CLOUD_VISITORS_IP_BLACK_LIST'';',
+'    from sys.user_tables where table_name = ''CLOUD_VISITORS_EXCLUDED_IP_LIST'';',
 '    if v_Count = 0 then',
 '        EXECUTE IMMEDIATE q''[',
-'    CREATE TABLE CLOUD_VISITORS_IP_BLACK_LIST (',
+'    CREATE TABLE CLOUD_VISITORS_EXCLUDED_IP_LIST (',
 '        ID              NUMBER DEFAULT ON NULL CLOUD_VISITORS_SEQ.NEXTVAL NOT NULL,',
 '        IP_ADDRESS      VARCHAR2(512) NOT NULL, ',
 '        CREATED_AT TIMESTAMP (6) WITH LOCAL TIME ZONE DEFAULT LOCALTIMESTAMP NOT NULL ENABLE, ',
@@ -13197,7 +13018,7 @@ wwv_flow_api.create_install_script(
 '        sys.dbms_output.put_line (''merge_remote_source merged '' || SQL%ROWCOUNT || '' rows'');',
 '        commit;',
 '        ',
-'        merge into CLOUD_VISITORS_IP_BLACK_LIST D ',
+'        merge into CLOUD_VISITORS_EXCLUDED_IP_LIST D ',
 '        using (',
 '            select ',
 '                IP_ADDRESS ',
@@ -13347,7 +13168,7 @@ wwv_flow_api.create_install_script(
 '            select ''localhost'' WEB_MODULE_ID,',
 '                    LAST_LOGIN_DATE, ',
 '                    SUM(LOGIN_CNT) LOGIN_CNT, ',
-'                    APPLICATION_ID, PAGE_I'))
+'                    APPLICATIO'))
 );
 end;
 /
@@ -13355,7 +13176,7 @@ begin
 wwv_flow_api.append_to_install_script(
  p_id=>wwv_flow_api.id(13384023613269440)
 ,p_script_clob=>wwv_flow_string.join(wwv_flow_t_varchar2(
-'D,',
+'N_ID, PAGE_ID,',
 '                    MAX(APPLICATION_NAME) APPLICATION_NAME, ',
 '                    IP_ADDRESS, ',
 '                    MAX(AGENT) AGENT, ',

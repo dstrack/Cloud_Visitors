@@ -30,7 +30,7 @@ end;
 /
 DROP VIEW CLOUD_VISITORS_V;
 DROP TABLE CLOUD_VISITORS;
-DROP TABLE CLOUD_VISITORS_IP_BLACK_LIST;
+DROP TABLE CLOUD_VISITORS_EXCLUDED_IP_LIST;
 DROP SEQUENCE CLOUD_VISITORS_SEQ;
 DROP PACKAGE CLOUD_VISITORS_UTL;
 
@@ -154,10 +154,10 @@ begin
     end if; 
 
     SELECT COUNT(*) INTO v_Count
-    from sys.user_tables where table_name = 'CLOUD_VISITORS_IP_BLACK_LIST';
+    from sys.user_tables where table_name = 'CLOUD_VISITORS_EXCLUDED_IP_LIST';
     if v_Count = 0 then
         EXECUTE IMMEDIATE q'[
-    CREATE TABLE CLOUD_VISITORS_IP_BLACK_LIST (
+    CREATE TABLE CLOUD_VISITORS_EXCLUDED_IP_LIST (
         ID              NUMBER DEFAULT ON NULL CLOUD_VISITORS_SEQ.NEXTVAL NOT NULL,
         IP_ADDRESS      VARCHAR2(512) NOT NULL, 
         CREATED_AT TIMESTAMP (6) WITH LOCAL TIME ZONE DEFAULT LOCALTIMESTAMP NOT NULL ENABLE, 
@@ -556,7 +556,7 @@ Define a Data Sources / Web Source Module "Data Browser Visitors Source"
         sys.dbms_output.put_line ('merge_remote_source merged ' || SQL%ROWCOUNT || ' rows');
         commit;
         
-        merge into CLOUD_VISITORS_IP_BLACK_LIST D 
+        merge into CLOUD_VISITORS_EXCLUDED_IP_LIST D 
         using (
             select 
                 IP_ADDRESS 
