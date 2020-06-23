@@ -27,7 +27,7 @@ prompt APPLICATION 2050 - Cloud Visitors
 -- Application Export:
 --   Application:     2050
 --   Name:            Cloud Visitors
---   Date and Time:   23:07 Wednesday June 17, 2020
+--   Date and Time:   14:13 Tuesday June 23, 2020
 --   Exported By:     DIRK
 --   Flashback:       0
 --   Export Type:     Application Export
@@ -104,7 +104,7 @@ wwv_flow_api.create_flow(
 ,p_public_user=>'APEX_PUBLIC_USER'
 ,p_proxy_server=>nvl(wwv_flow_application_install.get_proxy,'')
 ,p_no_proxy_domains=>nvl(wwv_flow_application_install.get_no_proxy_domains,'')
-,p_flow_version=>'Release 1.1'
+,p_flow_version=>'Release 1.1.02'
 ,p_flow_status=>'AVAILABLE_W_EDIT_LINK'
 ,p_flow_unavailable_text=>'This application is currently unavailable at this time.'
 ,p_exact_substitutions_only=>'Y'
@@ -116,7 +116,7 @@ wwv_flow_api.create_flow(
 ,p_substitution_string_01=>'APP_NAME'
 ,p_substitution_value_01=>'Cloud Visitors'
 ,p_last_updated_by=>'DIRK'
-,p_last_upd_yyyymmddhh24miss=>'20200617215203'
+,p_last_upd_yyyymmddhh24miss=>'20200623141254'
 ,p_file_prefix => nvl(wwv_flow_application_install.get_static_app_file_prefix,'')
 ,p_files_version=>3
 ,p_ui_type_name => null
@@ -11554,7 +11554,7 @@ wwv_flow_api.create_page(
 ,p_autocomplete_on_off=>'OFF'
 ,p_page_template_options=>'#DEFAULT#'
 ,p_last_updated_by=>'DIRK'
-,p_last_upd_yyyymmddhh24miss=>'20200617214719'
+,p_last_upd_yyyymmddhh24miss=>'20200623111110'
 );
 wwv_flow_api.create_page_plug(
  p_id=>wwv_flow_api.id(151123556451226304)
@@ -11706,7 +11706,7 @@ wwv_flow_api.create_page_plug(
 );
 wwv_flow_api.create_page_plug(
  p_id=>wwv_flow_api.id(157073618282771901)
-,p_plug_name=>'IP Black List'
+,p_plug_name=>'Excluded IP List'
 ,p_region_template_options=>'#DEFAULT#:t-Region--scrollBody'
 ,p_component_template_options=>'#DEFAULT#'
 ,p_plug_template=>wwv_flow_api.id(13257060739914077)
