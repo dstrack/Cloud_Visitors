@@ -27,7 +27,7 @@ prompt APPLICATION 2050 - Cloud Visitors
 -- Application Export:
 --   Application:     2050
 --   Name:            Cloud Visitors
---   Date and Time:   14:13 Tuesday June 23, 2020
+--   Date and Time:   15:17 Tuesday August 11, 2020
 --   Exported By:     DIRK
 --   Flashback:       0
 --   Export Type:     Application Export
@@ -116,7 +116,7 @@ wwv_flow_api.create_flow(
 ,p_substitution_string_01=>'APP_NAME'
 ,p_substitution_value_01=>'Cloud Visitors'
 ,p_last_updated_by=>'DIRK'
-,p_last_upd_yyyymmddhh24miss=>'20200623141254'
+,p_last_upd_yyyymmddhh24miss=>'20200811151349'
 ,p_file_prefix => nvl(wwv_flow_application_install.get_static_app_file_prefix,'')
 ,p_files_version=>3
 ,p_ui_type_name => null
@@ -12493,6 +12493,7 @@ wwv_flow_api.create_install_script(
 'DROP VIEW CLOUD_VISITORS_V;',
 'DROP TABLE CLOUD_VISITORS;',
 'DROP TABLE CLOUD_VISITORS_EXCLUDED_IP_LIST;',
+'DROP TABLE CLOUD_VISITORS_IP_BLACK_LIST;',
 'DROP SEQUENCE CLOUD_VISITORS_SEQ;',
 'DROP PACKAGE CLOUD_VISITORS_UTL;',
 '',
@@ -12624,8 +12625,8 @@ wwv_flow_api.create_install_script(
 '        IP_ADDRESS      VARCHAR2(512) NOT NULL, ',
 '        CREATED_AT TIMESTAMP (6) WITH LOCAL TIME ZONE DEFAULT LOCALTIMESTAMP NOT NULL ENABLE, ',
 '        CREATED_BY VARCHAR2(32 CHAR) DEFAULT NVL(SYS_CONTEXT(''APEX$SESSION'',''APP_USER''), SYS_CONTEXT(''USERENV'',''SESSION_USER'')) NOT NULL ENABLE, ',
-'        CONSTRAINT CLOUD_VISITORS_IP_BLACK_LIST_PK PRIMARY KEY (ID),',
-'        CONSTRAINT CLOUD_VISITORS_IP_BLACK_LIST_UN UNIQUE (IP_ADDRESS)',
+'        CONSTRAINT CLOUD_VISITORS_EXCLUDED_IP_LIST_PK PRIMARY KEY (ID),',
+'        CONSTRAINT CLOUD_VISITORS_EXCLUDED_IP_LIST_UN UNIQUE (IP_ADDRESS)',
 '    )',
 '        ]'';',
 '    end if; ',
@@ -13167,8 +13168,7 @@ wwv_flow_api.create_install_script(
 '        using (',
 '            select ''localhost'' WEB_MODULE_ID,',
 '                    LAST_LOGIN_DATE, ',
-'                    SUM(LOGIN_CNT) LOGIN_CNT, ',
-'                    APPLICATIO'))
+'                    SUM(LOGIN_'))
 );
 end;
 /
@@ -13176,7 +13176,8 @@ begin
 wwv_flow_api.append_to_install_script(
  p_id=>wwv_flow_api.id(13384023613269440)
 ,p_script_clob=>wwv_flow_string.join(wwv_flow_t_varchar2(
-'N_ID, PAGE_ID,',
+'CNT) LOGIN_CNT, ',
+'                    APPLICATION_ID, PAGE_ID,',
 '                    MAX(APPLICATION_NAME) APPLICATION_NAME, ',
 '                    IP_ADDRESS, ',
 '                    MAX(AGENT) AGENT, ',
