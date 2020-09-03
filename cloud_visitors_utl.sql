@@ -181,6 +181,7 @@ end;
 CREATE OR REPLACE PACKAGE CLOUD_VISITORS_UTL 
 AUTHID CURRENT_USER
 IS
+	g_debug BOOLEAN := FALSE;
     type appvisitor_row_t IS RECORD (
         LAST_LOGIN_DATE VARCHAR2(20),
         LOGIN_CNT       NUMBER,
@@ -351,7 +352,9 @@ IS
         apex_exec.close( l_context );
     exception
         when others then
-            sys.dbms_output.put_line('Pipe_Db_Ip_Geoloc_Rest failed with error : ' || SQLERRM);
+        	if g_debug then
+            	sys.dbms_output.put_line('Pipe_Db_Ip_Geoloc_Rest failed with error : ' || SQLERRM);
+            end if;
             -- IMPORTANT: also release all resources, when an exception occcurs!
             apex_exec.close( l_context );
     end Pipe_Db_Ip_Geoloc_Rest;
@@ -369,7 +372,9 @@ IS
             FROM CLOUD_VISITORS A, table(apex_string.split(A.IP_ADDRESS, ',')) B 
             WHERE IP_LOCATION IS NULL
         ) loop
-            sys.dbms_output.put_line ('ip-Address is '||ip_cur.IP_ADDRESS);
+        	if g_debug then
+            	sys.dbms_output.put_line ('ip-Address is '||ip_cur.IP_ADDRESS);
+            end if;
             for ip_loc_cur in (
                 select IP_ADDRESS, CONTINENTCODE, CONTINENTNAME, COUNTRYCODE, COUNTRYNAME, STATEPROV, CITY
                 from table ( CLOUD_VISITORS_UTL.Pipe_Db_Ip_Geoloc_Rest (
@@ -387,11 +392,14 @@ IS
                     CITY = ip_loc_cur.CITY
                 WHERE IP_LOCATION IS NULL
                 AND INSTR(IP_ADDRESS, ip_cur.IP_ADDRESS) > 0;
-            
+                -- the rest access task may fail any time. So let´s save what we have.
+            	COMMIT;
                 l_Row_Count := l_Row_Count + SQL%ROWCOUNT;
             end loop;
         end loop;
-        sys.dbms_output.put_line ('merged ' || l_Row_Count || ' geolocation rows');
+        if g_debug then
+        	sys.dbms_output.put_line ('merged ' || l_Row_Count || ' geolocation rows');
+        end if;
         commit;
     end Geoloc_Upd;
 
@@ -404,13 +412,15 @@ IS
     as
         l_Row_Count NUMBER := 0;
     begin
-        sys.dbms_output.enable;
         apex_session.create_session ( 
             p_app_id => p_app_id,
             p_page_id => p_page_id,
             p_username => p_user_name
         );
-        sys.dbms_output.put_line ('App is '||v('APP_ID')|| ', session is ' || v('APP_SESSION'));
+    	if g_debug then
+        	sys.dbms_output.enable(null);
+	        sys.dbms_output.put_line ('App is '||v('APP_ID')|| ', session is ' || v('APP_SESSION'));
+        end if;
         -- lookup geolocation of visitors ip address 
         Geoloc_Upd(p_geoloc_module_static_id=>p_geoloc_module_static_id);
         apex_session.delete_session ( p_session_id => v('APP_SESSION') );
@@ -515,7 +525,9 @@ Define a Data Sources / Web Source Module "Data Browser Visitors Source"
         apex_exec.close( l_context );
     exception
         when others then
-            sys.dbms_output.put_line('Pipe_app_visitor_rest failed with error : ' || SQLERRM);
+        	if g_debug then
+            	sys.dbms_output.put_line('Pipe_app_visitor_rest failed with error : ' || SQLERRM);
+            end if;
             -- IMPORTANT: also release all resources, when an exception occcurs!
             apex_exec.close( l_context );
             raise;
@@ -554,7 +566,9 @@ Define a Data Sources / Web Source Module "Data Browser Visitors Source"
             values (S.WEB_MODULE_ID, S.LAST_LOGIN_DATE, S.LOGIN_CNT, S.APPLICATION_ID, S.PAGE_ID, S.APPLICATION_NAME, S.IP_ADDRESS, S.AGENT, 
                     S.PAGE_NAME, S.REQUESTS, S.CNT, S.ELAPSED_TIME, S.DURATION_MINS)
         ;
-        sys.dbms_output.put_line ('merge_remote_source merged ' || SQL%ROWCOUNT || ' rows');
+        if g_debug then
+        	sys.dbms_output.put_line ('merge_remote_source merged ' || SQL%ROWCOUNT || ' rows');
+        end if;
         commit;
         
         merge into CLOUD_VISITORS_EXCLUDED_IP_LIST D 
@@ -585,13 +599,15 @@ Define a Data Sources / Web Source Module "Data Browser Visitors Source"
     )
     is
     begin
-        sys.dbms_output.enable;
         apex_session.create_session ( 
             p_app_id => p_app_id,
             p_page_id => p_page_id,
             p_username => p_user_name
         );
-        sys.dbms_output.put_line ('App is '||v('APP_ID')|| ', session is ' || v('APP_SESSION'));
+        if g_debug then
+        	sys.dbms_output.enable(null);
+        	sys.dbms_output.put_line ('App is '||v('APP_ID')|| ', session is ' || v('APP_SESSION'));
+        end if;
         merge_remote_source_call (
             p_vis_module_static_id => p_vis_module_static_id,
             p_geoloc_module_static_id => p_geoloc_module_static_id );
@@ -624,7 +640,9 @@ Define a Data Sources / Web Source Module "Data Browser Visitors Source"
             INTO v_Job_STATE, v_Job_Name
             FROM USER_SCHEDULER_JOBS
             WHERE JOB_NAME LIKE v_Job_Name || '%';
-            DBMS_OUTPUT.PUT_LINE('Job - found ' || v_Job_Name || ', state: ' || v_Job_STATE );
+            if g_debug then
+            	DBMS_OUTPUT.PUT_LINE('Job - found ' || v_Job_Name || ', state: ' || v_Job_STATE );
+            end if;
             if p_Enabled = 'NO' then
                 if v_Job_STATE = 'RUNNING' then 
                     dbms_scheduler.stop_job ( job_name => v_Job_Name );
@@ -634,7 +652,9 @@ Define a Data Sources / Web Source Module "Data Browser Visitors Source"
                     force => TRUE
                 );
                 commit;
-                DBMS_OUTPUT.PUT_LINE('Job - stopped ' || v_Job_Name );
+                if g_debug then
+                	DBMS_OUTPUT.PUT_LINE('Job - stopped ' || v_Job_Name );
+                end if;
             end if;
         exception
           when NO_DATA_FOUND then
@@ -741,13 +761,15 @@ Define a Data Sources / Web Source Module "Data Browser Visitors Source"
     )
     is 
     begin
-        sys.dbms_output.enable;
         apex_session.create_session ( 
             p_app_id => p_app_id,
             p_page_id => p_page_id,
             p_username => p_user_name
         );
-        sys.dbms_output.put_line ('App is '||v('APP_ID')|| ', session is ' || v('APP_SESSION'));
+        if g_debug then
+	        sys.dbms_output.enable(null);
+    	    sys.dbms_output.put_line ('App is '||v('APP_ID')|| ', session is ' || v('APP_SESSION'));
+    	end if;
         merge_local_source_call(p_geoloc_module_static_id);
         apex_session.delete_session ( p_session_id => v('APP_SESSION') );
     end merge_local_source;
@@ -768,7 +790,9 @@ Define a Data Sources / Web Source Module "Data Browser Visitors Source"
             INTO v_Job_STATE
             FROM USER_SCHEDULER_JOBS
             WHERE JOB_NAME = v_Job_Name;
-            DBMS_OUTPUT.PUT_LINE('Job - found ' || v_Job_Name || ', state: ' || v_Job_STATE );
+            if g_debug then
+            	DBMS_OUTPUT.PUT_LINE('Job - found ' || v_Job_Name || ', state: ' || v_Job_STATE );
+            end if;
             if p_Enabled = 'NO' then
                 if v_Job_STATE = 'RUNNING' then 
                     dbms_scheduler.stop_job ( job_name => v_Job_Name );
@@ -778,7 +802,9 @@ Define a Data Sources / Web Source Module "Data Browser Visitors Source"
                     force => TRUE
                 );
                 commit;
-                DBMS_OUTPUT.PUT_LINE('Job - stopped ' || v_Job_Name );
+                if g_debug then
+                	DBMS_OUTPUT.PUT_LINE('Job - stopped ' || v_Job_Name );
+                end if;
             end if;
         exception
           when NO_DATA_FOUND then
