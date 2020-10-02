@@ -27,7 +27,7 @@ prompt APPLICATION 2050 - Cloud Visitors
 -- Application Export:
 --   Application:     2050
 --   Name:            Cloud Visitors
---   Date and Time:   00:04 Friday September 4, 2020
+--   Date and Time:   01:47 Saturday October 3, 2020
 --   Exported By:     DIRK
 --   Flashback:       0
 --   Export Type:     Application Export
@@ -38,7 +38,7 @@ prompt APPLICATION 2050 - Cloud Visitors
 -- Application Statistics:
 --   Pages:                      7
 --     Items:                    9
---     Processes:               12
+--     Processes:               14
 --     Regions:                 20
 --     Buttons:                  6
 --     Dynamic Actions:          3
@@ -104,7 +104,7 @@ wwv_flow_api.create_flow(
 ,p_public_user=>'APEX_PUBLIC_USER'
 ,p_proxy_server=>nvl(wwv_flow_application_install.get_proxy,'')
 ,p_no_proxy_domains=>nvl(wwv_flow_application_install.get_no_proxy_domains,'')
-,p_flow_version=>'Release 1.1.04'
+,p_flow_version=>'Release 1.1.05'
 ,p_flow_status=>'AVAILABLE_W_EDIT_LINK'
 ,p_flow_unavailable_text=>'This application is currently unavailable at this time.'
 ,p_exact_substitutions_only=>'Y'
@@ -116,7 +116,7 @@ wwv_flow_api.create_flow(
 ,p_substitution_string_01=>'APP_NAME'
 ,p_substitution_value_01=>'Cloud Visitors'
 ,p_last_updated_by=>'DIRK'
-,p_last_upd_yyyymmddhh24miss=>'20200904000424'
+,p_last_upd_yyyymmddhh24miss=>'20201003014533'
 ,p_file_prefix => nvl(wwv_flow_application_install.get_static_app_file_prefix,'')
 ,p_files_version=>3
 ,p_ui_type_name => null
@@ -243,6 +243,26 @@ wwv_flow_api.create_data_profile_col(
 ,p_has_time_zone=>false
 ,p_selector=>'city'
 );
+wwv_flow_api.create_data_profile_col(
+ p_id=>wwv_flow_api.id(212893944659185554)
+,p_data_profile_id=>wwv_flow_api.id(151095392942358970)
+,p_name=>'ERROR'
+,p_sequence=>80
+,p_data_type=>'VARCHAR2'
+,p_max_length=>4000
+,p_has_time_zone=>false
+,p_selector=>'error'
+);
+wwv_flow_api.create_data_profile_col(
+ p_id=>wwv_flow_api.id(212894230077185563)
+,p_data_profile_id=>wwv_flow_api.id(151095392942358970)
+,p_name=>'ERRORCODE'
+,p_sequence=>90
+,p_data_type=>'VARCHAR2'
+,p_max_length=>4000
+,p_has_time_zone=>false
+,p_selector=>'errorCode'
+);
 end;
 /
 prompt --application/shared_components/data_profiles/oracle_cloud_strack_dev02_app_visitors
@@ -257,7 +277,7 @@ wwv_flow_api.create_data_profile_col(
  p_id=>wwv_flow_api.id(169838047983019421)
 ,p_data_profile_id=>wwv_flow_api.id(156720070937565177)
 ,p_name=>'CNT'
-,p_sequence=>1
+,p_sequence=>10
 ,p_data_type=>'NUMBER'
 ,p_has_time_zone=>false
 ,p_selector=>'cnt'
@@ -266,7 +286,7 @@ wwv_flow_api.create_data_profile_col(
  p_id=>wwv_flow_api.id(169838454815019421)
 ,p_data_profile_id=>wwv_flow_api.id(156720070937565177)
 ,p_name=>'AGENT'
-,p_sequence=>2
+,p_sequence=>20
 ,p_data_type=>'VARCHAR2'
 ,p_max_length=>4000
 ,p_has_time_zone=>false
@@ -276,7 +296,7 @@ wwv_flow_api.create_data_profile_col(
  p_id=>wwv_flow_api.id(169838883765019422)
 ,p_data_profile_id=>wwv_flow_api.id(156720070937565177)
 ,p_name=>'PAGE_ID'
-,p_sequence=>3
+,p_sequence=>30
 ,p_data_type=>'NUMBER'
 ,p_has_time_zone=>false
 ,p_selector=>'page_id'
@@ -285,7 +305,7 @@ wwv_flow_api.create_data_profile_col(
  p_id=>wwv_flow_api.id(169839212760019422)
 ,p_data_profile_id=>wwv_flow_api.id(156720070937565177)
 ,p_name=>'REQUESTS'
-,p_sequence=>4
+,p_sequence=>40
 ,p_data_type=>'VARCHAR2'
 ,p_max_length=>4000
 ,p_has_time_zone=>false
@@ -295,7 +315,7 @@ wwv_flow_api.create_data_profile_col(
  p_id=>wwv_flow_api.id(169839637089019422)
 ,p_data_profile_id=>wwv_flow_api.id(156720070937565177)
 ,p_name=>'LOGIN_CNT'
-,p_sequence=>5
+,p_sequence=>50
 ,p_data_type=>'NUMBER'
 ,p_has_time_zone=>false
 ,p_selector=>'login_cnt'
@@ -304,7 +324,7 @@ wwv_flow_api.create_data_profile_col(
  p_id=>wwv_flow_api.id(169840017351019422)
 ,p_data_profile_id=>wwv_flow_api.id(156720070937565177)
 ,p_name=>'PAGE_NAME'
-,p_sequence=>6
+,p_sequence=>60
 ,p_data_type=>'VARCHAR2'
 ,p_max_length=>4000
 ,p_has_time_zone=>false
@@ -314,7 +334,7 @@ wwv_flow_api.create_data_profile_col(
  p_id=>wwv_flow_api.id(169840432684019422)
 ,p_data_profile_id=>wwv_flow_api.id(156720070937565177)
 ,p_name=>'GROUP_NAME'
-,p_sequence=>7
+,p_sequence=>70
 ,p_is_hidden=>true
 ,p_data_type=>'VARCHAR2'
 ,p_max_length=>4000
@@ -325,7 +345,7 @@ wwv_flow_api.create_data_profile_col(
  p_id=>wwv_flow_api.id(169840860051019422)
 ,p_data_profile_id=>wwv_flow_api.id(156720070937565177)
 ,p_name=>'IP_ADDRESS'
-,p_sequence=>8
+,p_sequence=>80
 ,p_data_type=>'VARCHAR2'
 ,p_max_length=>4000
 ,p_has_time_zone=>false
@@ -335,7 +355,7 @@ wwv_flow_api.create_data_profile_col(
  p_id=>wwv_flow_api.id(169841213048019422)
 ,p_data_profile_id=>wwv_flow_api.id(156720070937565177)
 ,p_name=>'ELAPSED_TIME'
-,p_sequence=>9
+,p_sequence=>90
 ,p_data_type=>'NUMBER'
 ,p_has_time_zone=>false
 ,p_selector=>'elapsed_time'
@@ -344,7 +364,7 @@ wwv_flow_api.create_data_profile_col(
  p_id=>wwv_flow_api.id(169841667500019422)
 ,p_data_profile_id=>wwv_flow_api.id(156720070937565177)
 ,p_name=>'DURATION_MINS'
-,p_sequence=>10
+,p_sequence=>100
 ,p_data_type=>'NUMBER'
 ,p_has_time_zone=>false
 ,p_selector=>'duration_mins'
@@ -353,7 +373,7 @@ wwv_flow_api.create_data_profile_col(
  p_id=>wwv_flow_api.id(169842052752019422)
 ,p_data_profile_id=>wwv_flow_api.id(156720070937565177)
 ,p_name=>'APPLICATION_ID'
-,p_sequence=>11
+,p_sequence=>110
 ,p_data_type=>'NUMBER'
 ,p_has_time_zone=>false
 ,p_selector=>'application_id'
@@ -362,7 +382,7 @@ wwv_flow_api.create_data_profile_col(
  p_id=>wwv_flow_api.id(169842418265019423)
 ,p_data_profile_id=>wwv_flow_api.id(156720070937565177)
 ,p_name=>'LAST_LOGIN_DATE'
-,p_sequence=>12
+,p_sequence=>120
 ,p_data_type=>'VARCHAR2'
 ,p_max_length=>4000
 ,p_has_time_zone=>false
@@ -372,11 +392,21 @@ wwv_flow_api.create_data_profile_col(
  p_id=>wwv_flow_api.id(169842881439019423)
 ,p_data_profile_id=>wwv_flow_api.id(156720070937565177)
 ,p_name=>'APPLICATION_NAME'
-,p_sequence=>13
+,p_sequence=>130
 ,p_data_type=>'VARCHAR2'
 ,p_max_length=>4000
 ,p_has_time_zone=>false
 ,p_selector=>'application_name'
+);
+wwv_flow_api.create_data_profile_col(
+ p_id=>wwv_flow_api.id(211975135843035418)
+,p_data_profile_id=>wwv_flow_api.id(156720070937565177)
+,p_name=>'APEX_USER'
+,p_sequence=>140
+,p_data_type=>'VARCHAR2'
+,p_max_length=>4000
+,p_has_time_zone=>false
+,p_selector=>'apex_user'
 );
 end;
 /
@@ -10855,7 +10885,7 @@ wwv_flow_api.create_page(
 ,p_autocomplete_on_off=>'OFF'
 ,p_page_template_options=>'#DEFAULT#'
 ,p_last_updated_by=>'DIRK'
-,p_last_upd_yyyymmddhh24miss=>'20200617214710'
+,p_last_upd_yyyymmddhh24miss=>'20201001182726'
 );
 wwv_flow_api.create_page_plug(
  p_id=>wwv_flow_api.id(13555346716723078)
@@ -10885,6 +10915,7 @@ wwv_flow_api.create_page_plug(
 '       APPLICATION_ID,',
 '       PAGE_ID,',
 '       APPLICATION_NAME,',
+'       APEX_USER,',
 '       IP_ADDRESS,',
 '       IP_LOCATION,',
 '       AGENT,',
@@ -10994,9 +11025,17 @@ wwv_flow_api.create_worksheet_column(
 ,p_column_type=>'STRING'
 );
 wwv_flow_api.create_worksheet_column(
+ p_id=>wwv_flow_api.id(211943461068966301)
+,p_db_column_name=>'APEX_USER'
+,p_display_order=>54
+,p_column_identifier=>'AA'
+,p_column_label=>'Apex User'
+,p_column_type=>'STRING'
+);
+wwv_flow_api.create_worksheet_column(
  p_id=>wwv_flow_api.id(151123392664226302)
 ,p_db_column_name=>'IP_LOCATION'
-,p_display_order=>84
+,p_display_order=>64
 ,p_column_identifier=>'K'
 ,p_column_label=>'Ip Location'
 ,p_column_type=>'STRING'
@@ -11004,7 +11043,7 @@ wwv_flow_api.create_worksheet_column(
 wwv_flow_api.create_worksheet_column(
  p_id=>wwv_flow_api.id(151194188782159806)
 ,p_db_column_name=>'PAGE_NAME'
-,p_display_order=>104
+,p_display_order=>74
 ,p_column_identifier=>'M'
 ,p_column_label=>'Page Name'
 ,p_column_type=>'STRING'
@@ -11012,7 +11051,7 @@ wwv_flow_api.create_worksheet_column(
 wwv_flow_api.create_worksheet_column(
  p_id=>wwv_flow_api.id(151194276310159807)
 ,p_db_column_name=>'CNT'
-,p_display_order=>114
+,p_display_order=>84
 ,p_column_identifier=>'N'
 ,p_column_label=>'Cnt'
 ,p_column_type=>'NUMBER'
@@ -11021,7 +11060,7 @@ wwv_flow_api.create_worksheet_column(
 wwv_flow_api.create_worksheet_column(
  p_id=>wwv_flow_api.id(151194304202159808)
 ,p_db_column_name=>'ELAPSED_TIME'
-,p_display_order=>124
+,p_display_order=>94
 ,p_column_identifier=>'O'
 ,p_column_label=>'Elapsed Time'
 ,p_column_type=>'STRING'
@@ -11029,7 +11068,7 @@ wwv_flow_api.create_worksheet_column(
 wwv_flow_api.create_worksheet_column(
  p_id=>wwv_flow_api.id(151194472256159809)
 ,p_db_column_name=>'DURATION_MINS'
-,p_display_order=>134
+,p_display_order=>104
 ,p_column_identifier=>'P'
 ,p_column_label=>'Duration Mins'
 ,p_column_type=>'STRING'
@@ -11037,7 +11076,7 @@ wwv_flow_api.create_worksheet_column(
 wwv_flow_api.create_worksheet_column(
  p_id=>wwv_flow_api.id(151194506642159810)
 ,p_db_column_name=>'CONTINENTCODE'
-,p_display_order=>144
+,p_display_order=>114
 ,p_column_identifier=>'Q'
 ,p_column_label=>'Continentcode'
 ,p_column_type=>'STRING'
@@ -11045,7 +11084,7 @@ wwv_flow_api.create_worksheet_column(
 wwv_flow_api.create_worksheet_column(
  p_id=>wwv_flow_api.id(151194647606159811)
 ,p_db_column_name=>'CONTINENTNAME'
-,p_display_order=>154
+,p_display_order=>124
 ,p_column_identifier=>'R'
 ,p_column_label=>'Continentname'
 ,p_column_type=>'STRING'
@@ -11053,7 +11092,7 @@ wwv_flow_api.create_worksheet_column(
 wwv_flow_api.create_worksheet_column(
  p_id=>wwv_flow_api.id(151194760914159812)
 ,p_db_column_name=>'COUNTRYCODE'
-,p_display_order=>164
+,p_display_order=>134
 ,p_column_identifier=>'S'
 ,p_column_label=>'Countrycode'
 ,p_column_type=>'STRING'
@@ -11061,7 +11100,7 @@ wwv_flow_api.create_worksheet_column(
 wwv_flow_api.create_worksheet_column(
  p_id=>wwv_flow_api.id(151194827282159813)
 ,p_db_column_name=>'COUNTRYNAME'
-,p_display_order=>174
+,p_display_order=>144
 ,p_column_identifier=>'T'
 ,p_column_label=>'Countryname'
 ,p_column_type=>'STRING'
@@ -11069,7 +11108,7 @@ wwv_flow_api.create_worksheet_column(
 wwv_flow_api.create_worksheet_column(
  p_id=>wwv_flow_api.id(151194973503159814)
 ,p_db_column_name=>'STATEPROV'
-,p_display_order=>184
+,p_display_order=>154
 ,p_column_identifier=>'U'
 ,p_column_label=>'Stateprov'
 ,p_column_type=>'STRING'
@@ -11077,7 +11116,7 @@ wwv_flow_api.create_worksheet_column(
 wwv_flow_api.create_worksheet_column(
  p_id=>wwv_flow_api.id(151195014311159815)
 ,p_db_column_name=>'CITY'
-,p_display_order=>194
+,p_display_order=>164
 ,p_column_identifier=>'V'
 ,p_column_label=>'City'
 ,p_column_type=>'STRING'
@@ -11085,7 +11124,7 @@ wwv_flow_api.create_worksheet_column(
 wwv_flow_api.create_worksheet_column(
  p_id=>wwv_flow_api.id(154705926418839523)
 ,p_db_column_name=>'ID'
-,p_display_order=>204
+,p_display_order=>174
 ,p_column_identifier=>'W'
 ,p_column_label=>'Id'
 ,p_column_type=>'NUMBER'
@@ -11094,7 +11133,7 @@ wwv_flow_api.create_worksheet_column(
 wwv_flow_api.create_worksheet_column(
  p_id=>wwv_flow_api.id(154706051822839524)
 ,p_db_column_name=>'WEB_MODULE_ID'
-,p_display_order=>214
+,p_display_order=>184
 ,p_column_identifier=>'X'
 ,p_column_label=>'Web Module Id'
 ,p_column_type=>'STRING'
@@ -11102,7 +11141,7 @@ wwv_flow_api.create_worksheet_column(
 wwv_flow_api.create_worksheet_column(
  p_id=>wwv_flow_api.id(170063470935228901)
 ,p_db_column_name=>'REQUESTS'
-,p_display_order=>224
+,p_display_order=>194
 ,p_column_identifier=>'Y'
 ,p_column_label=>'Requests'
 ,p_column_type=>'STRING'
@@ -11111,7 +11150,7 @@ wwv_flow_api.create_worksheet_column(
 wwv_flow_api.create_worksheet_column(
  p_id=>wwv_flow_api.id(176133643049311301)
 ,p_db_column_name=>'IGNORED_IP_ADDRESS'
-,p_display_order=>234
+,p_display_order=>204
 ,p_column_identifier=>'Z'
 ,p_column_label=>'Ignored Ip Address'
 ,p_allow_sorting=>'N'
@@ -11135,7 +11174,7 @@ wwv_flow_api.create_worksheet_rpt(
 ,p_report_alias=>'135652'
 ,p_status=>'PUBLIC'
 ,p_is_default=>'Y'
-,p_report_columns=>'IGNORED_IP_ADDRESS:APXWS_CC_001:LAST_LOGIN_DATE:IP_ADDRESS:IP_LOCATION:AGENT:APPLICATION_NAME:PAGE_NAME:CNT:ELAPSED_TIME:DURATION_MINS:REQUESTS:'
+,p_report_columns=>'IGNORED_IP_ADDRESS:APXWS_CC_001:LAST_LOGIN_DATE:IP_ADDRESS:IP_LOCATION:AGENT:APPLICATION_NAME:PAGE_NAME:CNT:ELAPSED_TIME:DURATION_MINS:REQUESTS::APEX_USER'
 ,p_sort_column_1=>'APXWS_CC_001'
 ,p_sort_direction_1=>'DESC'
 ,p_sort_column_2=>'LAST_LOGIN_DATE'
@@ -11554,7 +11593,7 @@ wwv_flow_api.create_page(
 ,p_autocomplete_on_off=>'OFF'
 ,p_page_template_options=>'#DEFAULT#'
 ,p_last_updated_by=>'DIRK'
-,p_last_upd_yyyymmddhh24miss=>'20200623111110'
+,p_last_upd_yyyymmddhh24miss=>'20201002170117'
 );
 wwv_flow_api.create_page_plug(
  p_id=>wwv_flow_api.id(151123556451226304)
@@ -11577,8 +11616,8 @@ wwv_flow_api.create_page_plug(
 ,p_plug_display_point=>'BODY'
 ,p_location=>'WEB_SOURCE'
 ,p_web_src_module_id=>wwv_flow_api.id(151095916907358988)
-,p_query_type=>'SQL'
 ,p_plug_source_type=>'NATIVE_IR'
+,p_ajax_items_to_submit=>'P5_IP_ADDRESS'
 ,p_plug_query_options=>'DERIVED_REPORT_COLUMNS'
 ,p_plug_display_condition_type=>'ITEM_IS_NOT_NULL'
 ,p_plug_display_when_condition=>'P5_IP_ADDRESS'
@@ -11588,82 +11627,89 @@ wwv_flow_api.create_worksheet(
 ,p_name=>'SQL IP Location rest'
 ,p_max_row_count_message=>'The maximum row count for this report is #MAX_ROW_COUNT# rows.  Please apply a filter to reduce the number of records in your query.'
 ,p_no_data_found_message=>'No data found.'
+,p_base_pk1=>'IPADDRESS'
 ,p_show_nulls_as=>'-'
-,p_show_search_bar=>'N'
-,p_report_list_mode=>'TABS'
-,p_show_detail_link=>'N'
+,p_show_search_textbox=>'N'
+,p_report_list_mode=>'NONE'
+,p_show_notify=>'Y'
+,p_download_formats=>'CSV:HTML:EMAIL:XLS:PDF:RTF'
+,p_detail_link_text=>'<img src="#IMAGE_PREFIX#app_ui/img/icons/apex-edit-pencil.png" class="apex-edit-pencil" alt="">'
+,p_allow_exclude_null_values=>'N'
+,p_allow_hide_extra_columns=>'N'
 ,p_owner=>'DIRK'
 ,p_internal_uid=>151131495474274717
 );
 wwv_flow_api.create_worksheet_column(
- p_id=>wwv_flow_api.id(151131846720274727)
-,p_db_column_name=>'CITY'
-,p_display_order=>1
-,p_column_identifier=>'A'
-,p_column_label=>'City'
-,p_column_type=>'STRING'
-,p_heading_alignment=>'LEFT'
-,p_tz_dependent=>'N'
-);
-wwv_flow_api.create_worksheet_column(
- p_id=>wwv_flow_api.id(151132233098274730)
+ p_id=>wwv_flow_api.id(212855558837373817)
 ,p_db_column_name=>'IPADDRESS'
-,p_display_order=>2
-,p_column_identifier=>'B'
+,p_display_order=>10
+,p_column_identifier=>'H'
 ,p_column_label=>'Ipaddress'
 ,p_column_type=>'STRING'
-,p_heading_alignment=>'LEFT'
-,p_tz_dependent=>'N'
 );
 wwv_flow_api.create_worksheet_column(
- p_id=>wwv_flow_api.id(151132692491274731)
-,p_db_column_name=>'STATEPROV'
-,p_display_order=>3
-,p_column_identifier=>'C'
-,p_column_label=>'Stateprov'
-,p_column_type=>'STRING'
-,p_heading_alignment=>'LEFT'
-,p_tz_dependent=>'N'
-);
-wwv_flow_api.create_worksheet_column(
- p_id=>wwv_flow_api.id(151133084887274732)
-,p_db_column_name=>'COUNTRYCODE'
-,p_display_order=>4
-,p_column_identifier=>'D'
-,p_column_label=>'Countrycode'
-,p_column_type=>'STRING'
-,p_heading_alignment=>'LEFT'
-,p_tz_dependent=>'N'
-);
-wwv_flow_api.create_worksheet_column(
- p_id=>wwv_flow_api.id(151133487589274732)
-,p_db_column_name=>'COUNTRYNAME'
-,p_display_order=>5
-,p_column_identifier=>'E'
-,p_column_label=>'Countryname'
-,p_column_type=>'STRING'
-,p_heading_alignment=>'LEFT'
-,p_tz_dependent=>'N'
-);
-wwv_flow_api.create_worksheet_column(
- p_id=>wwv_flow_api.id(151133837015274732)
+ p_id=>wwv_flow_api.id(212855602748373818)
 ,p_db_column_name=>'CONTINENTCODE'
-,p_display_order=>6
-,p_column_identifier=>'F'
+,p_display_order=>20
+,p_column_identifier=>'I'
 ,p_column_label=>'Continentcode'
 ,p_column_type=>'STRING'
-,p_heading_alignment=>'LEFT'
-,p_tz_dependent=>'N'
 );
 wwv_flow_api.create_worksheet_column(
- p_id=>wwv_flow_api.id(151134242743274733)
+ p_id=>wwv_flow_api.id(212855715660373819)
 ,p_db_column_name=>'CONTINENTNAME'
-,p_display_order=>7
-,p_column_identifier=>'G'
+,p_display_order=>30
+,p_column_identifier=>'J'
 ,p_column_label=>'Continentname'
 ,p_column_type=>'STRING'
-,p_heading_alignment=>'LEFT'
-,p_tz_dependent=>'N'
+);
+wwv_flow_api.create_worksheet_column(
+ p_id=>wwv_flow_api.id(212855819339373820)
+,p_db_column_name=>'COUNTRYCODE'
+,p_display_order=>40
+,p_column_identifier=>'K'
+,p_column_label=>'Countrycode'
+,p_column_type=>'STRING'
+);
+wwv_flow_api.create_worksheet_column(
+ p_id=>wwv_flow_api.id(212855984958373821)
+,p_db_column_name=>'COUNTRYNAME'
+,p_display_order=>50
+,p_column_identifier=>'L'
+,p_column_label=>'Countryname'
+,p_column_type=>'STRING'
+);
+wwv_flow_api.create_worksheet_column(
+ p_id=>wwv_flow_api.id(212856077976373822)
+,p_db_column_name=>'STATEPROV'
+,p_display_order=>60
+,p_column_identifier=>'M'
+,p_column_label=>'Stateprov'
+,p_column_type=>'STRING'
+);
+wwv_flow_api.create_worksheet_column(
+ p_id=>wwv_flow_api.id(212856105529373823)
+,p_db_column_name=>'CITY'
+,p_display_order=>70
+,p_column_identifier=>'N'
+,p_column_label=>'City'
+,p_column_type=>'STRING'
+);
+wwv_flow_api.create_worksheet_column(
+ p_id=>wwv_flow_api.id(212856262575373824)
+,p_db_column_name=>'ERROR'
+,p_display_order=>80
+,p_column_identifier=>'O'
+,p_column_label=>'Error'
+,p_column_type=>'STRING'
+);
+wwv_flow_api.create_worksheet_column(
+ p_id=>wwv_flow_api.id(212856313419373825)
+,p_db_column_name=>'ERRORCODE'
+,p_display_order=>90
+,p_column_identifier=>'P'
+,p_column_label=>'Errorcode'
+,p_column_type=>'STRING'
 );
 wwv_flow_api.create_worksheet_rpt(
  p_id=>wwv_flow_api.id(151136660813289659)
@@ -11672,10 +11718,10 @@ wwv_flow_api.create_worksheet_rpt(
 ,p_report_alias=>'1511367'
 ,p_status=>'PUBLIC'
 ,p_is_default=>'Y'
-,p_report_columns=>'CITY:IPADDRESS:STATEPROV:COUNTRYCODE:COUNTRYNAME:CONTINENTCODE:CONTINENTNAME'
+,p_report_columns=>'IPADDRESS:CONTINENTCODE:COUNTRYNAME:CITY:STATEPROV:ERROR:'
 );
 wwv_flow_api.create_web_source_comp_param(
- p_id=>wwv_flow_api.id(151134714649274735)
+ p_id=>wwv_flow_api.id(212856461576373826)
 ,p_page_id=>5
 ,p_web_src_param_id=>wwv_flow_api.id(151096742274393840)
 ,p_page_plug_id=>wwv_flow_api.id(151131342200274717)
@@ -11683,12 +11729,12 @@ wwv_flow_api.create_web_source_comp_param(
 ,p_value=>'free'
 );
 wwv_flow_api.create_web_source_comp_param(
- p_id=>wwv_flow_api.id(151135270889274736)
+ p_id=>wwv_flow_api.id(212856578940373827)
 ,p_page_id=>5
 ,p_web_src_param_id=>wwv_flow_api.id(151097191736399179)
 ,p_page_plug_id=>wwv_flow_api.id(151131342200274717)
-,p_value_type=>'ITEM'
-,p_value=>'P5_IP_ADDRESS'
+,p_value_type=>'STATIC'
+,p_value=>'self'
 );
 wwv_flow_api.create_page_plug(
  p_id=>wwv_flow_api.id(154704748254839511)
@@ -11962,6 +12008,15 @@ wwv_flow_api.create_page_item(
 ,p_attribute_04=>'Y'
 );
 wwv_flow_api.create_page_process(
+ p_id=>wwv_flow_api.id(212883612241604681)
+,p_process_sequence=>30
+,p_process_point=>'AFTER_FOOTER'
+,p_process_type=>'NATIVE_PLSQL'
+,p_process_name=>'LOG_DBMS_OUTPUT'
+,p_process_sql_clob=>'APEX_DEBUG.LOG_DBMS_OUTPUT;'
+,p_error_display_location=>'INLINE_IN_NOTIFICATION'
+);
+wwv_flow_api.create_page_process(
  p_id=>wwv_flow_api.id(157074382610771908)
 ,p_process_sequence=>10
 ,p_process_point=>'AFTER_SUBMIT'
@@ -11972,6 +12027,15 @@ wwv_flow_api.create_page_process(
 ,p_attribute_05=>'Y'
 ,p_attribute_06=>'Y'
 ,p_attribute_08=>'Y'
+,p_error_display_location=>'INLINE_IN_NOTIFICATION'
+);
+wwv_flow_api.create_page_process(
+ p_id=>wwv_flow_api.id(212883332374603257)
+,p_process_sequence=>20
+,p_process_point=>'BEFORE_BOX_BODY'
+,p_process_type=>'NATIVE_PLSQL'
+,p_process_name=>'dbms_output_enable'
+,p_process_sql_clob=>'dbms_output.enable;'
 ,p_error_display_location=>'INLINE_IN_NOTIFICATION'
 );
 end;
@@ -11987,7 +12051,7 @@ wwv_flow_api.create_page(
 ,p_autocomplete_on_off=>'OFF'
 ,p_page_template_options=>'#DEFAULT#'
 ,p_last_updated_by=>'DIRK'
-,p_last_upd_yyyymmddhh24miss=>'20200617214734'
+,p_last_upd_yyyymmddhh24miss=>'20201002125047'
 );
 wwv_flow_api.create_page_plug(
  p_id=>wwv_flow_api.id(13375983895652313)
@@ -11998,12 +12062,12 @@ wwv_flow_api.create_page_plug(
 ,p_plug_display_point=>'BODY'
 ,p_query_type=>'SQL'
 ,p_plug_source=>wwv_flow_string.join(wwv_flow_t_varchar2(
-'select * ',
+'select T.* ',
 'from table ( Cloud_Visitors_Utl.Pipe_app_visitor_rest(:P7_WEB_SRC_MODULE) ) T',
 'where NOT EXISTS (',
 '    select 1',
 '    from CLOUD_VISITORS_EXCLUDED_IP_LIST S',
-'    where T.IP_ADDRESS LIKE S.IP_ADDRESS || ''%''',
+'    where T.IP_ADDRESS LIKE ''%'' || S.IP_ADDRESS || ''%''',
 ')'))
 ,p_plug_source_type=>'NATIVE_IR'
 ,p_ajax_items_to_submit=>'P7_WEB_SRC_MODULE'
@@ -12094,9 +12158,17 @@ wwv_flow_api.create_worksheet_column(
 ,p_column_type=>'STRING'
 );
 wwv_flow_api.create_worksheet_column(
+ p_id=>wwv_flow_api.id(211943514295966302)
+,p_db_column_name=>'APEX_USER'
+,p_display_order=>60
+,p_column_identifier=>'M'
+,p_column_label=>'Apex User'
+,p_column_type=>'STRING'
+);
+wwv_flow_api.create_worksheet_column(
  p_id=>wwv_flow_api.id(154707203176839536)
 ,p_db_column_name=>'IP_ADDRESS'
-,p_display_order=>60
+,p_display_order=>70
 ,p_column_identifier=>'F'
 ,p_column_label=>'Ip Address'
 ,p_column_type=>'STRING'
@@ -12104,7 +12176,7 @@ wwv_flow_api.create_worksheet_column(
 wwv_flow_api.create_worksheet_column(
  p_id=>wwv_flow_api.id(154707325068839537)
 ,p_db_column_name=>'AGENT'
-,p_display_order=>70
+,p_display_order=>80
 ,p_column_identifier=>'G'
 ,p_column_label=>'Agent'
 ,p_column_type=>'STRING'
@@ -12112,7 +12184,7 @@ wwv_flow_api.create_worksheet_column(
 wwv_flow_api.create_worksheet_column(
  p_id=>wwv_flow_api.id(154707420849839538)
 ,p_db_column_name=>'PAGE_NAME'
-,p_display_order=>80
+,p_display_order=>90
 ,p_column_identifier=>'H'
 ,p_column_label=>'Page Name'
 ,p_column_type=>'STRING'
@@ -12120,7 +12192,7 @@ wwv_flow_api.create_worksheet_column(
 wwv_flow_api.create_worksheet_column(
  p_id=>wwv_flow_api.id(154707552390839539)
 ,p_db_column_name=>'REQUESTS'
-,p_display_order=>90
+,p_display_order=>100
 ,p_column_identifier=>'I'
 ,p_column_label=>'Requests'
 ,p_column_type=>'STRING'
@@ -12128,7 +12200,7 @@ wwv_flow_api.create_worksheet_column(
 wwv_flow_api.create_worksheet_column(
  p_id=>wwv_flow_api.id(154707600494839540)
 ,p_db_column_name=>'CNT'
-,p_display_order=>100
+,p_display_order=>110
 ,p_column_identifier=>'J'
 ,p_column_label=>'Cnt'
 ,p_column_type=>'NUMBER'
@@ -12137,7 +12209,7 @@ wwv_flow_api.create_worksheet_column(
 wwv_flow_api.create_worksheet_column(
  p_id=>wwv_flow_api.id(154707777960839541)
 ,p_db_column_name=>'ELAPSED_TIME'
-,p_display_order=>110
+,p_display_order=>120
 ,p_column_identifier=>'K'
 ,p_column_label=>'Elapsed Time'
 ,p_column_type=>'STRING'
@@ -12145,7 +12217,7 @@ wwv_flow_api.create_worksheet_column(
 wwv_flow_api.create_worksheet_column(
  p_id=>wwv_flow_api.id(154707854638839542)
 ,p_db_column_name=>'DURATION_MINS'
-,p_display_order=>120
+,p_display_order=>130
 ,p_column_identifier=>'L'
 ,p_column_label=>'Duration Mins'
 ,p_column_type=>'STRING'
@@ -12157,7 +12229,7 @@ wwv_flow_api.create_worksheet_rpt(
 ,p_report_alias=>'1760853'
 ,p_status=>'PUBLIC'
 ,p_is_default=>'Y'
-,p_report_columns=>'LAST_LOGIN_DATE:LOGIN_CNT:APPLICATION_ID:PAGE_ID:APPLICATION_NAME:IP_ADDRESS:AGENT:PAGE_NAME:REQUESTS:CNT:ELAPSED_TIME:DURATION_MINS'
+,p_report_columns=>'LAST_LOGIN_DATE:LOGIN_CNT:APPLICATION_ID:PAGE_ID:APPLICATION_NAME:IP_ADDRESS:AGENT:PAGE_NAME:REQUESTS:CNT:ELAPSED_TIME:DURATION_MINS:APEX_USER'
 );
 wwv_flow_api.create_page_plug(
  p_id=>wwv_flow_api.id(13381956900652325)
@@ -12500,8 +12572,8 @@ wwv_flow_api.create_install_script(
 '*/',
 '',
 'CREATE OR REPLACE VIEW CLOUD_VISITORS_V (',
-'    LAST_LOGIN_DATE, LOGIN_CNT, APPLICATION_ID, PAGE_ID, APPLICATION_NAME, IP_ADDRESS, AGENT, ',
-'    PAGE_NAME, REQUESTS, CNT, ELAPSED_TIME, DURATION_MINS',
+'    LAST_LOGIN_DATE, LOGIN_CNT, APPLICATION_ID, PAGE_ID, APPLICATION_NAME, APEX_USER,',
+'    IP_ADDRESS, AGENT, PAGE_NAME, REQUESTS, CNT, ELAPSED_TIME, DURATION_MINS',
 ')',
 'AS',
 'with clients_q as (',
@@ -12515,29 +12587,30 @@ wwv_flow_api.create_install_script(
 '    GROUP BY APPLICATION_ID, IP_ADDRESS, APEX_SESSION_ID, AGENT',
 '    ORDER BY MAX(VIEW_TIMESTAMP) DESC',
 '), pages_q as (',
-'    select APPLICATION_ID, APPLICATION_NAME, APEX_SESSION_ID, PAGE_ID, PAGE_NAME,',
+'    select APPLICATION_ID, APPLICATION_NAME, APEX_USER, APEX_SESSION_ID, PAGE_ID, PAGE_NAME,',
 '        LISTAGG(REQUEST_VALUE, '', '') WITHIN GROUP (ORDER BY REQUEST_VALUE) as REQUESTS,',
 '        SUM(CNT) CNT, ',
 '        MIN(DATE_FROM) DATE_FROM, ',
 '        MAX(DATE_TO) DATE_TO, ',
 '        SUM(ELAPSED_TIME) ELAPSED_TIME',
 '    from (',
-'        select APPLICATION_ID, APPLICATION_NAME, APEX_SESSION_ID, PAGE_ID, PAGE_NAME, REQUEST_VALUE,',
+'        select APPLICATION_ID, APPLICATION_NAME, APEX_USER, APEX_SESSION_ID, PAGE_ID, PAGE_NAME, REQUEST_VALUE,',
 '            COUNT(*) CNT, ',
 '            CAST((MIN(VIEW_TIMESTAMP) AT TIME ZONE ''Europe/Berlin'') AS DATE) DATE_FROM, ',
 '            CAST((MAX(VIEW_TIMESTAMP) AT TIME ZONE ''Europe/Berlin'') AS DATE) DATE_TO,',
 '            SUM(ELAPSED_TIME) ELAPSED_TIME',
 '        from APEX_WORKSPACE_ACTIVITY_LOG',
 '        where PAGE_ID != 0',
-'        group by APPLICATION_ID, APPLICATION_NAME, APEX_SESSION_ID, PAGE_ID, PAGE_NAME, REQUEST_VALUE',
+'        group by APPLICATION_ID, APPLICATION_NAME, APEX_USER, APEX_SESSION_ID, PAGE_ID, PAGE_NAME, REQUEST_VALUE',
 '    )',
-'    group by APPLICATION_ID, APPLICATION_NAME, APEX_SESSION_ID, PAGE_ID, PAGE_NAME',
+'    group by APPLICATION_ID, APPLICATION_NAME, APEX_USER, APEX_SESSION_ID, PAGE_ID, PAGE_NAME',
 '), page_totals_q as (',
 '    select MAX(c.LAST_LOGIN_DATE) LAST_LOGIN_DATE, ',
 '        sum(c.LOGIN_CNT) LOGIN_CNT, ',
 '        c.APPLICATION_ID, ',
 '        c.PAGE_ID, ',
 '        c.APPLICATION_NAME,',
+'        c.APEX_USER,',
 '        c.IP_ADDRESS, c.AGENT,',
 '        c.PAGE_NAME, ',
 '        c.REQUESTS, ',
@@ -12546,15 +12619,15 @@ wwv_flow_api.create_install_script(
 '        round(sum(c.DATE_TO - c.DATE_FROM) * 24 * 60, 2)  DURATION_MINS',
 '    from (',
 '        select p.PAGE_ID, p.PAGE_NAME, p.REQUESTS, p.CNT, p.DATE_FROM, p.DATE_TO, p.ELAPSED_TIME,',
-'                c.LAST_LOGIN_DATE, c.LOGIN_CNT, c.APPLICATION_ID, p.APPLICATION_NAME,',
+'                c.LAST_LOGIN_DATE, c.LOGIN_CNT, c.APPLICATION_ID, p.APPLICATION_NAME, p.APEX_USER,',
 '                c.IP_ADDRESS, c.APEX_SESSION_ID, c.AGENT',
 '        from clients_q c ',
 '        join pages_q p on c.APPLICATION_ID = p.APPLICATION_ID and c.APEX_SESSION_ID = p.APEX_SESSION_ID',
 '    ) c ',
-'    group by c.APPLICATION_ID, c.APPLICATION_NAME, c.IP_ADDRESS, c.AGENT, c.PAGE_ID, c.PAGE_NAME, c.REQUESTS',
+'    group by c.APPLICATION_ID, c.APPLICATION_NAME, c.APEX_USER, c.IP_ADDRESS, c.AGENT, c.PAGE_ID, c.PAGE_NAME, c.REQUESTS',
 ') ---------------------------------------------------------------------------------------',
 'select c.LAST_LOGIN_DATE, c.LOGIN_CNT, ',
-'    c.APPLICATION_ID, c.PAGE_ID, c.APPLICATION_NAME, ',
+'    c.APPLICATION_ID, c.PAGE_ID, c.APPLICATION_NAME, c.APEX_USER, ',
 '    c.IP_ADDRESS, c.AGENT,',
 '    PAGE_NAME, REQUESTS, CNT, ELAPSED_TIME, DURATION_MINS',
 'from page_totals_q c',
@@ -12572,7 +12645,7 @@ wwv_flow_api.create_install_script(
 '    from sys.user_tables t ',
 '    where t.table_name = ''CLOUD_VISITORS''',
 '    and not exists (',
-'        select 1 from sys.user_tab_cols c where c.table_name = t.table_name and c.column_name = ''REQUESTS''  -- latest added column.',
+'        select 1 from sys.user_tab_cols c where c.table_name = t.table_name and c.column_name = ''APEX_USER''  -- latest added column.',
 '    );',
 '    if v_Count = 1 then',
 '        EXECUTE IMMEDIATE ''DROP TABLE CLOUD_VISITORS'';',
@@ -12596,6 +12669,7 @@ wwv_flow_api.create_install_script(
 '        APPLICATION_ID  NUMBER NOT NULL, ',
 '        PAGE_ID         NUMBER NOT NULL,',
 '        APPLICATION_NAME VARCHAR2(255), ',
+'        APEX_USER 		VARCHAR2(255),',
 '        IP_ADDRESS      VARCHAR2(4000) NOT NULL, ',
 '        IP_LOCATION     VARCHAR2(4000), ',
 '        AGENT           VARCHAR2(4000),',
@@ -12643,13 +12717,14 @@ wwv_flow_api.create_install_script(
 'CREATE OR REPLACE PACKAGE CLOUD_VISITORS_UTL ',
 'AUTHID CURRENT_USER',
 'IS',
-'	g_debug BOOLEAN := FALSE;',
+'	g_debug BOOLEAN := TRUE;',
 '    type appvisitor_row_t IS RECORD (',
 '        LAST_LOGIN_DATE VARCHAR2(20),',
 '        LOGIN_CNT       NUMBER,',
 '        APPLICATION_ID  NUMBER,',
 '        PAGE_ID         NUMBER, ',
 '        APPLICATION_NAME VARCHAR2(255), ',
+'        APEX_USER		VARCHAR2(255), ',
 '        IP_ADDRESS      VARCHAR2(4000),',
 '        AGENT           VARCHAR2(4000),',
 '        PAGE_NAME       VARCHAR2(4000),',
@@ -12667,13 +12742,16 @@ wwv_flow_api.create_install_script(
 '        COUNTRYCODE     VARCHAR2(2),',
 '        COUNTRYNAME     VARCHAR2(500),',
 '        STATEPROV       VARCHAR2(500),',
-'        CITY            VARCHAR2(500)',
+'        CITY            VARCHAR2(500),',
+'        ERROR           VARCHAR2(500),',
+'        ERRORCODE       VARCHAR2(500)',
 '    );',
 '    type db_ip_geoloc_free_table_t IS table of db_ip_geoloc_free_row_t;',
 '    ',
 '    function Pipe_Db_Ip_Geoloc_Rest (',
 '        p_ipAddress VARCHAR2 DEFAULT ''self'',',
-'        p_geoloc_module_static_id VARCHAR2 DEFAULT ''IP_Geolocation''',
+'        p_geoloc_module_static_id VARCHAR2 DEFAULT ''IP_Geolocation'',',
+'        p_API_Key VARCHAR2 DEFAULT ''free''',
 '    ) return db_ip_geoloc_free_table_t pipelined;',
 '    ',
 '    function Pipe_app_visitor_rest (',
@@ -12737,10 +12815,12 @@ wwv_flow_api.create_install_script(
 '',
 '    function Pipe_Db_Ip_Geoloc_Rest (',
 '        p_ipAddress VARCHAR2 DEFAULT ''self'',',
-'        p_geoloc_module_static_id VARCHAR2 DEFAULT ''IP_Geolocation''',
+'        p_geoloc_module_static_id VARCHAR2 DEFAULT ''IP_Geolocation'',',
+'        p_API_Key VARCHAR2 DEFAULT ''free''',
 '    ) return db_ip_geoloc_free_table_t pipelined is',
 '        l_columns apex_exec.t_columns;',
 '        l_context apex_exec.t_context;',
+'		l_columns_names apex_t_varchar2;',
 '        l_parameters apex_exec.t_parameters;',
 '        type t_column_position is table of pls_integer index by varchar2(32767);',
 '        l_column_position t_column_position;',
@@ -12748,33 +12828,20 @@ wwv_flow_api.create_install_script(
 '        if p_geoloc_module_static_id IS NULL then ',
 '            return;',
 '        end if;',
+'        l_columns_names := apex_string.split(',
+'        	''IPADDRESS,CONTINENTCODE,CONTINENTNAME,COUNTRYCODE,COUNTRYNAME,STATEPROV,CITY,ERROR,ERRORCODE''',
+'        	, '','');',
 '',
 '        -- specify columns to select from the web source module',
-'        apex_exec.add_column( ',
-'            p_columns       => l_columns,',
-'            p_column_name   => ''IPADDRESS'' );',
-'        apex_exec.add_column( ',
-'            p_columns       => l_columns,',
-'            p_column_name   => ''CONTINENTCODE'' );',
-'        apex_exec.add_column( ',
-'            p_columns       => l_columns,',
-'            p_column_name   => ''CONTINENTNAME'' );',
-'        apex_exec.add_column( ',
-'            p_columns       => l_columns,',
-'            p_column_name   => ''COUNTRYCODE'' );',
-'        apex_exec.add_column( ',
-'            p_columns       => l_columns,',
-'            p_column_name   => ''COUNTRYNAME'' );',
-'        apex_exec.add_column( ',
-'            p_columns       => l_columns,',
-'            p_column_name   => ''STATEPROV'' );',
-'        apex_exec.add_column( ',
-'            p_columns       => l_columns,',
-'            p_column_name   => ''CITY'' );',
+'		for c_idx IN 1..l_columns_names.count loop',
+'			apex_exec.add_column( ',
+'				p_columns       => l_columns,',
+'				p_column_name   => l_columns_names(c_idx)  );',
+'		end loop;',
 '        apex_exec.add_parameter( ',
 '            p_parameters => l_parameters, ',
 '            p_name => ''apiKey'', ',
-'            p_value => ''free'' );',
+'            p_value => p_API_Key );',
 '        apex_exec.add_parameter( ',
 '            p_parameters => l_parameters, ',
 '            p_name => ''ipAddress'', ',
@@ -12787,13 +12854,9 @@ wwv_flow_api.create_install_script(
 '            p_columns          => l_columns );',
 '',
 '        -- now get result set positions for the selected columns',
-'        l_column_position( ''IPADDRESS'' )        := apex_exec.get_column_position( l_context, ''IPADDRESS'' );',
-'        l_column_position( ''CONTINENTCODE'' )    := apex_exec.get_column_position( l_context, ''CONTINENTCODE'' );',
-'        l_column_position( ''CONTINENTNAME'' )    := apex_exec.get_column_position( l_context, ''CONTINENTNAME'' );',
-'        l_column_position( ''COUNTRYCODE'' )      := apex_exec.get_column_position( l_context, ''COUNTRYCODE'' );',
-'        l_column_position( ''COUNTRYNAME'' )      := apex_exec.get_column_position( l_context, ''COUNTRYNAME'' );',
-'        l_column_position( ''STATEPROV'' )        := apex_exec.get_column_position( l_context, ''STATEPROV'' );',
-'        l_column_position( ''CITY'' )             := apex_exec.get_column_position( l_context, ''CITY'' );',
+'		for c_idx IN 1..l_columns_names.count loop',
+'			l_column_position( l_columns_names(c_idx) )  := apex_exec.get_column_position( l_context, l_columns_names(c_idx) );',
+'		end loop;',
 '',
 '        -- loop through result set and print out contents',
 '        while apex_exec.next_row( l_context ) loop',
@@ -12805,7 +12868,9 @@ wwv_flow_api.create_install_script(
 '                    apex_exec.get_varchar2( l_context, l_column_position( ''COUNTRYCODE'' ) ),',
 '                    apex_exec.get_varchar2( l_context, l_column_position( ''COUNTRYNAME'' ) ),',
 '                    apex_exec.get_varchar2( l_context, l_column_position( ''STATEPROV'' ) ),',
-'                    apex_exec.get_varchar2( l_context, l_column_position( ''CITY'' ) )',
+'                    apex_exec.get_varchar2( l_context, l_column_position( ''CITY'' ) ),',
+'                    apex_exec.get_varchar2( l_context, l_column_position( ''ERROR'' ) ),',
+'                    apex_exec.get_varchar2( l_context, l_column_position( ''ERRORCODE'' ) )',
 '                ) ',
 '            );',
 '        end loop;',
@@ -12813,6 +12878,8 @@ wwv_flow_api.create_install_script(
 '        -- finally: release all resources',
 '        apex_exec.close( l_context );',
 '    exception',
+'    	when no_data_needed then',
+'            apex_exec.close( l_context );    	',
 '        when others then',
 '        	if g_debug then',
 '            	sys.dbms_output.put_line(''Pipe_Db_Ip_Geoloc_Rest failed with error : '' || SQLERRM);',
@@ -12826,43 +12893,50 @@ wwv_flow_api.create_install_script(
 '    )',
 '    as',
 '        l_Row_Count NUMBER := 0;',
+'        l_Row_Total NUMBER := 0;',
 '    begin',
 '        -- lookup geolocation of visitors ip address ',
 '        for ip_cur in (',
 '            SELECT DISTINCT ',
-'                TRIM(B.column_value) IP_ADDRESS',
-'            FROM CLOUD_VISITORS A, table(apex_string.split(A.IP_ADDRESS, '','')) B ',
+'                case when instr(ip_address, '','') > 0 then substr(ip_address, 1, instr(ip_address, '','')-1) else ip_address end IP_ADDRESS',
+'            FROM CLOUD_VISITORS A',
 '            WHERE IP_LOCATION IS NULL',
 '        ) loop',
 '        	if g_debug then',
 '            	sys.dbms_output.put_line (''ip-Address is ''||ip_cur.IP_ADDRESS);',
 '            end if;',
+'            l_Row_Count := 0;',
 '            for ip_loc_cur in (',
-'                select IP_ADDRESS, CONTINENTCODE, CONTINENTNAME, COUNTRYCODE, COUNTRYNAME, STATEPROV, CITY',
+'                select IP_ADDRESS, CONTINENTCODE, CONTINENTNAME, COUNTRYCODE, COUNTRYNAME, STATEPROV, CITY, ERRORCODE',
 '                from table ( CLOUD_VISITORS_UTL.Pipe_Db_Ip_Geoloc_Rest (',
 '                    p_ipAddress => ip_cur.IP_ADDRESS, ',
 '                    p_geoloc_module_static_id => p_geoloc_module_static_id) ) S',
-'                where CITY IS NOT NULL',
 '            ) loop',
-'                UPDATE CLOUD_VISITORS ',
-'                SET IP_LOCATION = ip_loc_cur.COUNTRYNAME ||'', ''|| ip_loc_cur.STATEPROV ||'', ''|| ip_loc_cur.CITY,',
-'                    CONTINENTCODE = ip_loc_cur.CONTINENTCODE,',
-'                    CONTINENTNAME = ip_loc_cur.CONTINENTNAME,',
-'                    COUNTRYCODE = ip_loc_cur.COUNTRYCODE,',
-'                    COUNTRYNAME = ip_loc_cur.COUNTRYNAME,',
-'                    STATEPROV = ip_loc_cur.STATEPROV,',
-'                    CITY = ip_loc_cur.CITY',
-'                WHERE IP_LOCATION IS NULL',
-'                AND INSTR(IP_ADDRESS, ip_cur.IP_ADDRESS) > 0;',
-unistr('                -- the rest access task may fail any time. So let\00B4s save what we have.'),
-'            	COMMIT;',
-'                l_Row_Count := l_Row_Count + SQL%ROWCOUNT;',
+'            	exit when ip_loc_cur.ERRORCODE IS NOT NULL;',
+'            	if ip_cur.IP_ADDRESS IS NOT NULL',
+'            	and ip_loc_cur.CONTINENTCODE IS NOT NULL then',
+'					UPDATE CLOUD_VISITORS ',
+'					SET IP_LOCATION = ip_loc_cur.COUNTRYNAME ||'', ''|| ip_loc_cur.STATEPROV ||'', ''|| ip_loc_cur.CITY,',
+'						CONTINENTCODE = ip_loc_cur.CONTINENTCODE,',
+'						CONTINENTNAME = ip_loc_cur.CONTINENTNAME,',
+'						COUNTRYCODE = ip_loc_cur.COUNTRYCODE,',
+'						COUNTRYNAME = ip_loc_cur.COUNTRYNAME,',
+'						STATEPROV = ip_loc_cur.STATEPROV,',
+'						CITY = ip_loc_cur.CITY',
+'					WHERE IP_LOCATION IS NULL',
+'					AND IP_ADDRESS LIKE ip_cur.IP_ADDRESS || ''%'';',
+unistr('					-- the rest access task may fail any time. So let\00B4s save what we have.'),
+'					l_Row_Count := l_Row_Count + SQL%ROWCOUNT;',
+'					COMMIT;',
+'				end if;',
 '            end loop;',
+'            exit when l_Row_Count = 0;',
+'            l_Row_Total := l_Row_Total + l_Row_Count;',
 '        end loop;',
 '        if g_debug then',
-'        	sys.dbms_output.put_line (''merged '' || l_Row_Count || '' geolocation rows'');',
+'        	sys.dbms_output.put_line (''merged '' || l_Row_Total || '' geolocation rows'');',
 '        end if;',
-'        commit;',
+'        COMMIT;',
 '    end Geoloc_Upd;',
 '',
 '    PROCEDURE Geoloc_Upd (',
@@ -12899,69 +12973,32 @@ unistr('                -- the rest access task may fail any time. So let\00B4s 
 '    is',
 '        l_columns apex_exec.t_columns;',
 '        l_context apex_exec.t_context;',
-'',
+'		l_columns_names apex_t_varchar2;',
 '        type t_column_position is table of pls_integer index by varchar2(32767);',
 '        l_column_position t_column_position;',
 '    begin',
 '        if p_vis_module_static_id IS NULL then ',
 '            return;',
 '        end if;',
+'        l_columns_names := apex_string.split(',
+'        	''LAST_LOGIN_DATE,LOGIN_CNT,APPLICATION_ID,PAGE_ID,APPLICATION_NAME,APEX_USER,IP_ADDRESS,AGENT,PAGE_NAME,REQUESTS,CNT,ELAPSED_TIME,DURATION_MINS''',
+'        	, '','');',
 '        -- specify columns to select from the web source module',
-'        apex_exec.add_column( ',
-'            p_columns       => l_columns,',
-'            p_column_name   => ''LAST_LOGIN_DATE'' );',
-'        apex_exec.add_column( ',
-'            p_columns       => l_columns,',
-'            p_column_name   => ''LOGIN_CNT'' );',
-'        apex_exec.add_column( ',
-'            p_columns       => l_columns,',
-'            p_column_name   => ''APPLICATION_ID'' );',
-'        apex_exec.add_column( ',
-'            p_columns       => l_columns,',
-'            p_column_name   => ''PAGE_ID'' );',
-'        apex_exec.add_column( ',
-'            p_columns       => l_columns,',
-'            p_column_name   => ''APPLICATION_NAME'' );',
-'        apex_exec.add_column( ',
-'            p_columns       => l_columns,',
-'            p_column_name   => ''IP_ADDRESS'' );',
-'        apex_exec.add_column( ',
-'            p_columns       => l_columns,',
-'            p_column_name   => ''AGENT'' );',
-'        apex_exec.add_column( ',
-'            p_columns       => l_columns,',
-'            p_column_name   => ''PAGE_NAME'' );',
-'        apex_exec.add_column( ',
-'            p_columns       => l_columns,',
-'            p_column_name   => ''REQUESTS'' );',
-'        apex_exec.add_column( ',
-'            p_columns       => l_columns,',
-'            p_column_name   => ''CNT'' );',
-'        apex_exec.add_column( ',
-'            p_columns       => l_columns,',
-'            p_column_name   => ''ELAPSED_TIME'' );',
-'        apex_exec.add_column( ',
-'            p_columns       => l_columns,',
-'            p_column_name   => ''DURATION_MINS'' );',
-'',
+'		for c_idx IN 1..l_columns_names.count loop',
+'			apex_exec.add_column( ',
+'				p_columns       => l_columns,',
+'				p_column_name   => l_columns_names(c_idx)  );',
+'		end loop;',
+'		',
 '        -- invoke Web Source Module and select data',
 '        l_context := apex_exec.open_web_source_query(',
 '            p_module_static_id => p_vis_module_static_id,',
 '            p_columns          => l_columns );',
 '',
 '        -- now get result set positions for the selected columns',
-'        l_column_position( ''LAST_LOGIN_DATE'' )  := apex_exec.get_column_position( l_context, ''LAST_LOGIN_DATE'' );',
-'        l_column_position( ''LOGIN_CNT'' )        := apex_exec.get_column_position( l_context, ''LOGIN_CNT'' );',
-'        l_column_position( ''APPLICATION_ID'' )   := apex_exec.get_column_position( l_context, ''APPLICATION_ID'' );',
-'        l_column_position( ''PAGE_ID'' )          := apex_exec.get_column_position( l_context, ''PAGE_ID'' );',
-'        l_column_position( ''APPLICATION_NAME'' ) := apex_exec.get_column_position( l_context, ''APPLICATION_NAME'' );',
-'        l_column_position( ''IP_ADDRESS'' )       := apex_exec.get_column_position( l_context, ''IP_ADDRESS'' );',
-'        l_column_position( ''AGENT'' )            := apex_exec.get_column_position( l_context, ''AGENT'' );',
-'        l_column_position( ''PAGE_NAME'' )        := apex_exec.get_column_position( l_context, ''PAGE_NAME'' );',
-'        l_column_position( ''REQUESTS'' )         := apex_exec.get_column_position( l_context, ''REQUESTS'' );',
-'        l_column_position( ''CNT'' )              := apex_exec.get_column_position( l_context, ''CNT'' );',
-'        l_column_position( ''ELAPSED_TIME'' )     := apex_exec.get_column_position( l_context, ''ELAPSED_TIME'' );',
-'        l_column_position( ''DURATION_MINS'' )    := apex_exec.get_column_position( l_context, ''DURATION_MINS'' );',
+'		for c_idx IN 1..l_columns_names.count loop',
+'			l_column_position( l_columns_names(c_idx) )  := apex_exec.get_column_position( l_context, l_columns_names(c_idx) );',
+'		end loop;',
 '',
 '        -- loop through result set and print out contents',
 '        while apex_exec.next_row( l_context ) loop',
@@ -12972,6 +13009,7 @@ unistr('                -- the rest access task may fail any time. So let\00B4s 
 '                    apex_exec.get_number( l_context, l_column_position( ''APPLICATION_ID'' ) ),',
 '                    apex_exec.get_number( l_context, l_column_position( ''PAGE_ID'' ) ),',
 '                    apex_exec.get_varchar2( l_context, l_column_position( ''APPLICATION_NAME'' ) ),',
+'                    apex_exec.get_varchar2( l_context, l_column_position( ''APEX_USER'' ) ),',
 '                    apex_exec.get_varchar2( l_context, l_column_position( ''IP_ADDRESS'' ) ),',
 '                    apex_exec.get_varchar2( l_context, l_column_position( ''AGENT'' ) ),',
 '                    apex_exec.get_varchar2( l_context, l_column_position( ''PAGE_NAME'' ) ),',
@@ -12986,6 +13024,8 @@ unistr('                -- the rest access task may fail any time. So let\00B4s 
 '        -- finally: release all resources',
 '        apex_exec.close( l_context );',
 '    exception',
+'    	when no_data_needed then',
+'            apex_exec.close( l_context );    	',
 '        when others then',
 '        	if g_debug then',
 '            	sys.dbms_output.put_line(''Pipe_app_visitor_rest failed with error : '' || SQLERRM);',
@@ -13173,15 +13213,7 @@ unistr('                -- the rest access task may fail any time. So let\00B4s 
 '        ords.define_handler(',
 '            p_module_name => ''appvisitors.rest'',',
 '            p_pattern     => ''hol/:ip_address'',',
-'          '))
-);
-end;
-/
-begin
-wwv_flow_api.append_to_install_script(
- p_id=>wwv_flow_api.id(13384023613269440)
-,p_script_clob=>wwv_flow_string.join(wwv_flow_t_varchar2(
-'  p_method      => ''GET'',',
+'            p_method      => ''GET'',',
 '            p_source_type => ords.source_type_collection_item,',
 '            p_source      => ''select * from CLOUD_VISITORS_V where ip_address = :ip_address'' );',
 '        commit;',
@@ -13226,7 +13258,15 @@ wwv_flow_api.append_to_install_script(
 '    PROCEDURE merge_local_source (',
 '        p_app_id NUMBER DEFAULT NV(''APP_ID''),',
 '        p_page_id NUMBER DEFAULT NV(''APP_PAGE_ID''),',
-'        p_user_name VARCHAR2 DEFAULT V(''APP_USER''),',
+'        p_user_'))
+);
+end;
+/
+begin
+wwv_flow_api.append_to_install_script(
+ p_id=>wwv_flow_api.id(13384023613269440)
+,p_script_clob=>wwv_flow_string.join(wwv_flow_t_varchar2(
+'name VARCHAR2 DEFAULT V(''APP_USER''),',
 '        p_geoloc_module_static_id VARCHAR2 DEFAULT ''IP_Geolocation''',
 '    )',
 '    is ',
@@ -13237,7 +13277,6 @@ wwv_flow_api.append_to_install_script(
 '            p_username => p_user_name',
 '        );',
 '        if g_debug then',
-'	        sys.dbms_output.enable(null);',
 '    	    sys.dbms_output.put_line (''App is ''||v(''APP_ID'')|| '', session is '' || v(''APP_SESSION''));',
 '    	end if;',
 '        merge_local_source_call(p_geoloc_module_static_id);',

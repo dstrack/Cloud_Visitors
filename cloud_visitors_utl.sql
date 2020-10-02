@@ -38,8 +38,8 @@ DROP PACKAGE CLOUD_VISITORS_UTL;
 */
 
 CREATE OR REPLACE VIEW CLOUD_VISITORS_V (
-    LAST_LOGIN_DATE, LOGIN_CNT, APPLICATION_ID, PAGE_ID, APPLICATION_NAME, IP_ADDRESS, AGENT, 
-    PAGE_NAME, REQUESTS, CNT, ELAPSED_TIME, DURATION_MINS
+    LAST_LOGIN_DATE, LOGIN_CNT, APPLICATION_ID, PAGE_ID, APPLICATION_NAME, APEX_USER,
+    IP_ADDRESS, AGENT, PAGE_NAME, REQUESTS, CNT, ELAPSED_TIME, DURATION_MINS
 )
 AS
 with clients_q as (
@@ -53,29 +53,30 @@ with clients_q as (
     GROUP BY APPLICATION_ID, IP_ADDRESS, APEX_SESSION_ID, AGENT
     ORDER BY MAX(VIEW_TIMESTAMP) DESC
 ), pages_q as (
-    select APPLICATION_ID, APPLICATION_NAME, APEX_SESSION_ID, PAGE_ID, PAGE_NAME,
+    select APPLICATION_ID, APPLICATION_NAME, APEX_USER, APEX_SESSION_ID, PAGE_ID, PAGE_NAME,
         LISTAGG(REQUEST_VALUE, ', ') WITHIN GROUP (ORDER BY REQUEST_VALUE) as REQUESTS,
         SUM(CNT) CNT, 
         MIN(DATE_FROM) DATE_FROM, 
         MAX(DATE_TO) DATE_TO, 
         SUM(ELAPSED_TIME) ELAPSED_TIME
     from (
-        select APPLICATION_ID, APPLICATION_NAME, APEX_SESSION_ID, PAGE_ID, PAGE_NAME, REQUEST_VALUE,
+        select APPLICATION_ID, APPLICATION_NAME, APEX_USER, APEX_SESSION_ID, PAGE_ID, PAGE_NAME, REQUEST_VALUE,
             COUNT(*) CNT, 
             CAST((MIN(VIEW_TIMESTAMP) AT TIME ZONE 'Europe/Berlin') AS DATE) DATE_FROM, 
             CAST((MAX(VIEW_TIMESTAMP) AT TIME ZONE 'Europe/Berlin') AS DATE) DATE_TO,
             SUM(ELAPSED_TIME) ELAPSED_TIME
         from APEX_WORKSPACE_ACTIVITY_LOG
         where PAGE_ID != 0
-        group by APPLICATION_ID, APPLICATION_NAME, APEX_SESSION_ID, PAGE_ID, PAGE_NAME, REQUEST_VALUE
+        group by APPLICATION_ID, APPLICATION_NAME, APEX_USER, APEX_SESSION_ID, PAGE_ID, PAGE_NAME, REQUEST_VALUE
     )
-    group by APPLICATION_ID, APPLICATION_NAME, APEX_SESSION_ID, PAGE_ID, PAGE_NAME
+    group by APPLICATION_ID, APPLICATION_NAME, APEX_USER, APEX_SESSION_ID, PAGE_ID, PAGE_NAME
 ), page_totals_q as (
     select MAX(c.LAST_LOGIN_DATE) LAST_LOGIN_DATE, 
         sum(c.LOGIN_CNT) LOGIN_CNT, 
         c.APPLICATION_ID, 
         c.PAGE_ID, 
         c.APPLICATION_NAME,
+        c.APEX_USER,
         c.IP_ADDRESS, c.AGENT,
         c.PAGE_NAME, 
         c.REQUESTS, 
@@ -84,15 +85,15 @@ with clients_q as (
         round(sum(c.DATE_TO - c.DATE_FROM) * 24 * 60, 2)  DURATION_MINS
     from (
         select p.PAGE_ID, p.PAGE_NAME, p.REQUESTS, p.CNT, p.DATE_FROM, p.DATE_TO, p.ELAPSED_TIME,
-                c.LAST_LOGIN_DATE, c.LOGIN_CNT, c.APPLICATION_ID, p.APPLICATION_NAME,
+                c.LAST_LOGIN_DATE, c.LOGIN_CNT, c.APPLICATION_ID, p.APPLICATION_NAME, p.APEX_USER,
                 c.IP_ADDRESS, c.APEX_SESSION_ID, c.AGENT
         from clients_q c 
         join pages_q p on c.APPLICATION_ID = p.APPLICATION_ID and c.APEX_SESSION_ID = p.APEX_SESSION_ID
     ) c 
-    group by c.APPLICATION_ID, c.APPLICATION_NAME, c.IP_ADDRESS, c.AGENT, c.PAGE_ID, c.PAGE_NAME, c.REQUESTS
+    group by c.APPLICATION_ID, c.APPLICATION_NAME, c.APEX_USER, c.IP_ADDRESS, c.AGENT, c.PAGE_ID, c.PAGE_NAME, c.REQUESTS
 ) ---------------------------------------------------------------------------------------
 select c.LAST_LOGIN_DATE, c.LOGIN_CNT, 
-    c.APPLICATION_ID, c.PAGE_ID, c.APPLICATION_NAME, 
+    c.APPLICATION_ID, c.PAGE_ID, c.APPLICATION_NAME, c.APEX_USER, 
     c.IP_ADDRESS, c.AGENT,
     PAGE_NAME, REQUESTS, CNT, ELAPSED_TIME, DURATION_MINS
 from page_totals_q c
@@ -110,7 +111,7 @@ begin
     from sys.user_tables t 
     where t.table_name = 'CLOUD_VISITORS'
     and not exists (
-        select 1 from sys.user_tab_cols c where c.table_name = t.table_name and c.column_name = 'REQUESTS'  -- latest added column.
+        select 1 from sys.user_tab_cols c where c.table_name = t.table_name and c.column_name = 'APEX_USER'  -- latest added column.
     );
     if v_Count = 1 then
         EXECUTE IMMEDIATE 'DROP TABLE CLOUD_VISITORS';
@@ -134,6 +135,7 @@ begin
         APPLICATION_ID  NUMBER NOT NULL, 
         PAGE_ID         NUMBER NOT NULL,
         APPLICATION_NAME VARCHAR2(255), 
+        APEX_USER 		VARCHAR2(255),
         IP_ADDRESS      VARCHAR2(4000) NOT NULL, 
         IP_LOCATION     VARCHAR2(4000), 
         AGENT           VARCHAR2(4000),
@@ -181,13 +183,14 @@ end;
 CREATE OR REPLACE PACKAGE CLOUD_VISITORS_UTL 
 AUTHID CURRENT_USER
 IS
-	g_debug BOOLEAN := FALSE;
+	g_debug BOOLEAN := TRUE;
     type appvisitor_row_t IS RECORD (
         LAST_LOGIN_DATE VARCHAR2(20),
         LOGIN_CNT       NUMBER,
         APPLICATION_ID  NUMBER,
         PAGE_ID         NUMBER, 
         APPLICATION_NAME VARCHAR2(255), 
+        APEX_USER		VARCHAR2(255), 
         IP_ADDRESS      VARCHAR2(4000),
         AGENT           VARCHAR2(4000),
         PAGE_NAME       VARCHAR2(4000),
@@ -205,13 +208,16 @@ IS
         COUNTRYCODE     VARCHAR2(2),
         COUNTRYNAME     VARCHAR2(500),
         STATEPROV       VARCHAR2(500),
-        CITY            VARCHAR2(500)
+        CITY            VARCHAR2(500),
+        ERROR           VARCHAR2(500),
+        ERRORCODE       VARCHAR2(500)
     );
     type db_ip_geoloc_free_table_t IS table of db_ip_geoloc_free_row_t;
     
     function Pipe_Db_Ip_Geoloc_Rest (
         p_ipAddress VARCHAR2 DEFAULT 'self',
-        p_geoloc_module_static_id VARCHAR2 DEFAULT 'IP_Geolocation'
+        p_geoloc_module_static_id VARCHAR2 DEFAULT 'IP_Geolocation',
+        p_API_Key VARCHAR2 DEFAULT 'free'
     ) return db_ip_geoloc_free_table_t pipelined;
     
     function Pipe_app_visitor_rest (
@@ -275,10 +281,12 @@ IS
 
     function Pipe_Db_Ip_Geoloc_Rest (
         p_ipAddress VARCHAR2 DEFAULT 'self',
-        p_geoloc_module_static_id VARCHAR2 DEFAULT 'IP_Geolocation'
+        p_geoloc_module_static_id VARCHAR2 DEFAULT 'IP_Geolocation',
+        p_API_Key VARCHAR2 DEFAULT 'free'
     ) return db_ip_geoloc_free_table_t pipelined is
         l_columns apex_exec.t_columns;
         l_context apex_exec.t_context;
+		l_columns_names apex_t_varchar2;
         l_parameters apex_exec.t_parameters;
         type t_column_position is table of pls_integer index by varchar2(32767);
         l_column_position t_column_position;
@@ -286,33 +294,20 @@ IS
         if p_geoloc_module_static_id IS NULL then 
             return;
         end if;
+        l_columns_names := apex_string.split(
+        	'IPADDRESS,CONTINENTCODE,CONTINENTNAME,COUNTRYCODE,COUNTRYNAME,STATEPROV,CITY,ERROR,ERRORCODE'
+        	, ',');
 
         -- specify columns to select from the web source module
-        apex_exec.add_column( 
-            p_columns       => l_columns,
-            p_column_name   => 'IPADDRESS' );
-        apex_exec.add_column( 
-            p_columns       => l_columns,
-            p_column_name   => 'CONTINENTCODE' );
-        apex_exec.add_column( 
-            p_columns       => l_columns,
-            p_column_name   => 'CONTINENTNAME' );
-        apex_exec.add_column( 
-            p_columns       => l_columns,
-            p_column_name   => 'COUNTRYCODE' );
-        apex_exec.add_column( 
-            p_columns       => l_columns,
-            p_column_name   => 'COUNTRYNAME' );
-        apex_exec.add_column( 
-            p_columns       => l_columns,
-            p_column_name   => 'STATEPROV' );
-        apex_exec.add_column( 
-            p_columns       => l_columns,
-            p_column_name   => 'CITY' );
+		for c_idx IN 1..l_columns_names.count loop
+			apex_exec.add_column( 
+				p_columns       => l_columns,
+				p_column_name   => l_columns_names(c_idx)  );
+		end loop;
         apex_exec.add_parameter( 
             p_parameters => l_parameters, 
             p_name => 'apiKey', 
-            p_value => 'free' );
+            p_value => p_API_Key );
         apex_exec.add_parameter( 
             p_parameters => l_parameters, 
             p_name => 'ipAddress', 
@@ -325,13 +320,9 @@ IS
             p_columns          => l_columns );
 
         -- now get result set positions for the selected columns
-        l_column_position( 'IPADDRESS' )        := apex_exec.get_column_position( l_context, 'IPADDRESS' );
-        l_column_position( 'CONTINENTCODE' )    := apex_exec.get_column_position( l_context, 'CONTINENTCODE' );
-        l_column_position( 'CONTINENTNAME' )    := apex_exec.get_column_position( l_context, 'CONTINENTNAME' );
-        l_column_position( 'COUNTRYCODE' )      := apex_exec.get_column_position( l_context, 'COUNTRYCODE' );
-        l_column_position( 'COUNTRYNAME' )      := apex_exec.get_column_position( l_context, 'COUNTRYNAME' );
-        l_column_position( 'STATEPROV' )        := apex_exec.get_column_position( l_context, 'STATEPROV' );
-        l_column_position( 'CITY' )             := apex_exec.get_column_position( l_context, 'CITY' );
+		for c_idx IN 1..l_columns_names.count loop
+			l_column_position( l_columns_names(c_idx) )  := apex_exec.get_column_position( l_context, l_columns_names(c_idx) );
+		end loop;
 
         -- loop through result set and print out contents
         while apex_exec.next_row( l_context ) loop
@@ -343,7 +334,9 @@ IS
                     apex_exec.get_varchar2( l_context, l_column_position( 'COUNTRYCODE' ) ),
                     apex_exec.get_varchar2( l_context, l_column_position( 'COUNTRYNAME' ) ),
                     apex_exec.get_varchar2( l_context, l_column_position( 'STATEPROV' ) ),
-                    apex_exec.get_varchar2( l_context, l_column_position( 'CITY' ) )
+                    apex_exec.get_varchar2( l_context, l_column_position( 'CITY' ) ),
+                    apex_exec.get_varchar2( l_context, l_column_position( 'ERROR' ) ),
+                    apex_exec.get_varchar2( l_context, l_column_position( 'ERRORCODE' ) )
                 ) 
             );
         end loop;
@@ -351,6 +344,8 @@ IS
         -- finally: release all resources
         apex_exec.close( l_context );
     exception
+    	when no_data_needed then
+            apex_exec.close( l_context );    	
         when others then
         	if g_debug then
             	sys.dbms_output.put_line('Pipe_Db_Ip_Geoloc_Rest failed with error : ' || SQLERRM);
@@ -364,43 +359,50 @@ IS
     )
     as
         l_Row_Count NUMBER := 0;
+        l_Row_Total NUMBER := 0;
     begin
         -- lookup geolocation of visitors ip address 
         for ip_cur in (
             SELECT DISTINCT 
-                TRIM(B.column_value) IP_ADDRESS
-            FROM CLOUD_VISITORS A, table(apex_string.split(A.IP_ADDRESS, ',')) B 
+                case when instr(ip_address, ',') > 0 then substr(ip_address, 1, instr(ip_address, ',')-1) else ip_address end IP_ADDRESS
+            FROM CLOUD_VISITORS A
             WHERE IP_LOCATION IS NULL
         ) loop
         	if g_debug then
             	sys.dbms_output.put_line ('ip-Address is '||ip_cur.IP_ADDRESS);
             end if;
+            l_Row_Count := 0;
             for ip_loc_cur in (
-                select IP_ADDRESS, CONTINENTCODE, CONTINENTNAME, COUNTRYCODE, COUNTRYNAME, STATEPROV, CITY
+                select IP_ADDRESS, CONTINENTCODE, CONTINENTNAME, COUNTRYCODE, COUNTRYNAME, STATEPROV, CITY, ERRORCODE
                 from table ( CLOUD_VISITORS_UTL.Pipe_Db_Ip_Geoloc_Rest (
                     p_ipAddress => ip_cur.IP_ADDRESS, 
                     p_geoloc_module_static_id => p_geoloc_module_static_id) ) S
-                where CITY IS NOT NULL
             ) loop
-                UPDATE CLOUD_VISITORS 
-                SET IP_LOCATION = ip_loc_cur.COUNTRYNAME ||', '|| ip_loc_cur.STATEPROV ||', '|| ip_loc_cur.CITY,
-                    CONTINENTCODE = ip_loc_cur.CONTINENTCODE,
-                    CONTINENTNAME = ip_loc_cur.CONTINENTNAME,
-                    COUNTRYCODE = ip_loc_cur.COUNTRYCODE,
-                    COUNTRYNAME = ip_loc_cur.COUNTRYNAME,
-                    STATEPROV = ip_loc_cur.STATEPROV,
-                    CITY = ip_loc_cur.CITY
-                WHERE IP_LOCATION IS NULL
-                AND INSTR(IP_ADDRESS, ip_cur.IP_ADDRESS) > 0;
-                -- the rest access task may fail any time. So let´s save what we have.
-            	COMMIT;
-                l_Row_Count := l_Row_Count + SQL%ROWCOUNT;
+            	exit when ip_loc_cur.ERRORCODE IS NOT NULL;
+            	if ip_cur.IP_ADDRESS IS NOT NULL
+            	and ip_loc_cur.CONTINENTCODE IS NOT NULL then
+					UPDATE CLOUD_VISITORS 
+					SET IP_LOCATION = ip_loc_cur.COUNTRYNAME ||', '|| ip_loc_cur.STATEPROV ||', '|| ip_loc_cur.CITY,
+						CONTINENTCODE = ip_loc_cur.CONTINENTCODE,
+						CONTINENTNAME = ip_loc_cur.CONTINENTNAME,
+						COUNTRYCODE = ip_loc_cur.COUNTRYCODE,
+						COUNTRYNAME = ip_loc_cur.COUNTRYNAME,
+						STATEPROV = ip_loc_cur.STATEPROV,
+						CITY = ip_loc_cur.CITY
+					WHERE IP_LOCATION IS NULL
+					AND IP_ADDRESS LIKE ip_cur.IP_ADDRESS || '%';
+					-- the rest access task may fail any time. So let´s save what we have.
+					l_Row_Count := l_Row_Count + SQL%ROWCOUNT;
+					COMMIT;
+				end if;
             end loop;
+            exit when l_Row_Count = 0;
+            l_Row_Total := l_Row_Total + l_Row_Count;
         end loop;
         if g_debug then
-        	sys.dbms_output.put_line ('merged ' || l_Row_Count || ' geolocation rows');
+        	sys.dbms_output.put_line ('merged ' || l_Row_Total || ' geolocation rows');
         end if;
-        commit;
+        COMMIT;
     end Geoloc_Upd;
 
     PROCEDURE Geoloc_Upd (
@@ -437,69 +439,32 @@ Define a Data Sources / Web Source Module "Data Browser Visitors Source"
     is
         l_columns apex_exec.t_columns;
         l_context apex_exec.t_context;
-
+		l_columns_names apex_t_varchar2;
         type t_column_position is table of pls_integer index by varchar2(32767);
         l_column_position t_column_position;
     begin
         if p_vis_module_static_id IS NULL then 
             return;
         end if;
+        l_columns_names := apex_string.split(
+        	'LAST_LOGIN_DATE,LOGIN_CNT,APPLICATION_ID,PAGE_ID,APPLICATION_NAME,APEX_USER,IP_ADDRESS,AGENT,PAGE_NAME,REQUESTS,CNT,ELAPSED_TIME,DURATION_MINS'
+        	, ',');
         -- specify columns to select from the web source module
-        apex_exec.add_column( 
-            p_columns       => l_columns,
-            p_column_name   => 'LAST_LOGIN_DATE' );
-        apex_exec.add_column( 
-            p_columns       => l_columns,
-            p_column_name   => 'LOGIN_CNT' );
-        apex_exec.add_column( 
-            p_columns       => l_columns,
-            p_column_name   => 'APPLICATION_ID' );
-        apex_exec.add_column( 
-            p_columns       => l_columns,
-            p_column_name   => 'PAGE_ID' );
-        apex_exec.add_column( 
-            p_columns       => l_columns,
-            p_column_name   => 'APPLICATION_NAME' );
-        apex_exec.add_column( 
-            p_columns       => l_columns,
-            p_column_name   => 'IP_ADDRESS' );
-        apex_exec.add_column( 
-            p_columns       => l_columns,
-            p_column_name   => 'AGENT' );
-        apex_exec.add_column( 
-            p_columns       => l_columns,
-            p_column_name   => 'PAGE_NAME' );
-        apex_exec.add_column( 
-            p_columns       => l_columns,
-            p_column_name   => 'REQUESTS' );
-        apex_exec.add_column( 
-            p_columns       => l_columns,
-            p_column_name   => 'CNT' );
-        apex_exec.add_column( 
-            p_columns       => l_columns,
-            p_column_name   => 'ELAPSED_TIME' );
-        apex_exec.add_column( 
-            p_columns       => l_columns,
-            p_column_name   => 'DURATION_MINS' );
-
+		for c_idx IN 1..l_columns_names.count loop
+			apex_exec.add_column( 
+				p_columns       => l_columns,
+				p_column_name   => l_columns_names(c_idx)  );
+		end loop;
+		
         -- invoke Web Source Module and select data
         l_context := apex_exec.open_web_source_query(
             p_module_static_id => p_vis_module_static_id,
             p_columns          => l_columns );
 
         -- now get result set positions for the selected columns
-        l_column_position( 'LAST_LOGIN_DATE' )  := apex_exec.get_column_position( l_context, 'LAST_LOGIN_DATE' );
-        l_column_position( 'LOGIN_CNT' )        := apex_exec.get_column_position( l_context, 'LOGIN_CNT' );
-        l_column_position( 'APPLICATION_ID' )   := apex_exec.get_column_position( l_context, 'APPLICATION_ID' );
-        l_column_position( 'PAGE_ID' )          := apex_exec.get_column_position( l_context, 'PAGE_ID' );
-        l_column_position( 'APPLICATION_NAME' ) := apex_exec.get_column_position( l_context, 'APPLICATION_NAME' );
-        l_column_position( 'IP_ADDRESS' )       := apex_exec.get_column_position( l_context, 'IP_ADDRESS' );
-        l_column_position( 'AGENT' )            := apex_exec.get_column_position( l_context, 'AGENT' );
-        l_column_position( 'PAGE_NAME' )        := apex_exec.get_column_position( l_context, 'PAGE_NAME' );
-        l_column_position( 'REQUESTS' )         := apex_exec.get_column_position( l_context, 'REQUESTS' );
-        l_column_position( 'CNT' )              := apex_exec.get_column_position( l_context, 'CNT' );
-        l_column_position( 'ELAPSED_TIME' )     := apex_exec.get_column_position( l_context, 'ELAPSED_TIME' );
-        l_column_position( 'DURATION_MINS' )    := apex_exec.get_column_position( l_context, 'DURATION_MINS' );
+		for c_idx IN 1..l_columns_names.count loop
+			l_column_position( l_columns_names(c_idx) )  := apex_exec.get_column_position( l_context, l_columns_names(c_idx) );
+		end loop;
 
         -- loop through result set and print out contents
         while apex_exec.next_row( l_context ) loop
@@ -510,6 +475,7 @@ Define a Data Sources / Web Source Module "Data Browser Visitors Source"
                     apex_exec.get_number( l_context, l_column_position( 'APPLICATION_ID' ) ),
                     apex_exec.get_number( l_context, l_column_position( 'PAGE_ID' ) ),
                     apex_exec.get_varchar2( l_context, l_column_position( 'APPLICATION_NAME' ) ),
+                    apex_exec.get_varchar2( l_context, l_column_position( 'APEX_USER' ) ),
                     apex_exec.get_varchar2( l_context, l_column_position( 'IP_ADDRESS' ) ),
                     apex_exec.get_varchar2( l_context, l_column_position( 'AGENT' ) ),
                     apex_exec.get_varchar2( l_context, l_column_position( 'PAGE_NAME' ) ),
@@ -524,6 +490,8 @@ Define a Data Sources / Web Source Module "Data Browser Visitors Source"
         -- finally: release all resources
         apex_exec.close( l_context );
     exception
+    	when no_data_needed then
+            apex_exec.close( l_context );    	
         when others then
         	if g_debug then
             	sys.dbms_output.put_line('Pipe_app_visitor_rest failed with error : ' || SQLERRM);
@@ -767,7 +735,6 @@ Define a Data Sources / Web Source Module "Data Browser Visitors Source"
             p_username => p_user_name
         );
         if g_debug then
-	        sys.dbms_output.enable(null);
     	    sys.dbms_output.put_line ('App is '||v('APP_ID')|| ', session is ' || v('APP_SESSION'));
     	end if;
         merge_local_source_call(p_geoloc_module_static_id);
