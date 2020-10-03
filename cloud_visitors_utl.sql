@@ -514,6 +514,7 @@ Define a Data Sources / Web Source Module "Data Browser Visitors Source"
                     SUM(LOGIN_CNT) LOGIN_CNT, 
                     APPLICATION_ID, PAGE_ID,
                     MAX(APPLICATION_NAME) APPLICATION_NAME, 
+                    MAX(APEX_USER) APEX_USER, 
                     IP_ADDRESS, 
                     MAX(AGENT) AGENT, 
                     MAX(PAGE_NAME) PAGE_NAME, 
@@ -529,9 +530,11 @@ Define a Data Sources / Web Source Module "Data Browser Visitors Source"
             update set D.AGENT = S.AGENT, D.LOGIN_CNT = S.LOGIN_CNT, D.PAGE_NAME = S.PAGE_NAME, D.REQUESTS = S.REQUESTS, 
                         D.ELAPSED_TIME = S.ELAPSED_TIME, D.DURATION_MINS = S.DURATION_MINS
         when not matched then 
-            insert (D.WEB_MODULE_ID, D.LAST_LOGIN_DATE, D.LOGIN_CNT, D.APPLICATION_ID, D.PAGE_ID, D.APPLICATION_NAME, D.IP_ADDRESS, D.AGENT, 
+            insert (D.WEB_MODULE_ID, D.LAST_LOGIN_DATE, D.LOGIN_CNT, D.APPLICATION_ID, D.PAGE_ID, 
+            		D.APPLICATION_NAME, D.APEX_USER, D.IP_ADDRESS, D.AGENT, 
                     D.PAGE_NAME, D.REQUESTS, D.CNT, D.ELAPSED_TIME, D.DURATION_MINS)
-            values (S.WEB_MODULE_ID, S.LAST_LOGIN_DATE, S.LOGIN_CNT, S.APPLICATION_ID, S.PAGE_ID, S.APPLICATION_NAME, S.IP_ADDRESS, S.AGENT, 
+            values (S.WEB_MODULE_ID, S.LAST_LOGIN_DATE, S.LOGIN_CNT, S.APPLICATION_ID, S.PAGE_ID, 
+            		S.APPLICATION_NAME, S.APEX_USER, S.IP_ADDRESS, S.AGENT, 
                     S.PAGE_NAME, S.REQUESTS, S.CNT, S.ELAPSED_TIME, S.DURATION_MINS)
         ;
         if g_debug then

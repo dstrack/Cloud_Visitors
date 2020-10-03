@@ -27,7 +27,7 @@ prompt APPLICATION 2050 - Cloud Visitors
 -- Application Export:
 --   Application:     2050
 --   Name:            Cloud Visitors
---   Date and Time:   01:47 Saturday October 3, 2020
+--   Date and Time:   02:34 Saturday October 3, 2020
 --   Exported By:     DIRK
 --   Flashback:       0
 --   Export Type:     Application Export
@@ -104,7 +104,7 @@ wwv_flow_api.create_flow(
 ,p_public_user=>'APEX_PUBLIC_USER'
 ,p_proxy_server=>nvl(wwv_flow_application_install.get_proxy,'')
 ,p_no_proxy_domains=>nvl(wwv_flow_application_install.get_no_proxy_domains,'')
-,p_flow_version=>'Release 1.1.05'
+,p_flow_version=>'Release 1.1.06'
 ,p_flow_status=>'AVAILABLE_W_EDIT_LINK'
 ,p_flow_unavailable_text=>'This application is currently unavailable at this time.'
 ,p_exact_substitutions_only=>'Y'
@@ -116,7 +116,7 @@ wwv_flow_api.create_flow(
 ,p_substitution_string_01=>'APP_NAME'
 ,p_substitution_value_01=>'Cloud Visitors'
 ,p_last_updated_by=>'DIRK'
-,p_last_upd_yyyymmddhh24miss=>'20201003014533'
+,p_last_upd_yyyymmddhh24miss=>'20201003023417'
 ,p_file_prefix => nvl(wwv_flow_application_install.get_static_app_file_prefix,'')
 ,p_files_version=>3
 ,p_ui_type_name => null
@@ -10584,7 +10584,7 @@ wwv_flow_api.create_page(
 ,p_page_template_options=>'#DEFAULT#'
 ,p_protection_level=>'C'
 ,p_last_updated_by=>'DIRK'
-,p_last_upd_yyyymmddhh24miss=>'20200617214935'
+,p_last_upd_yyyymmddhh24miss=>'20201003022927'
 );
 wwv_flow_api.create_page_plug(
  p_id=>wwv_flow_api.id(13358364503985632)
@@ -10596,7 +10596,6 @@ wwv_flow_api.create_page_plug(
 ,p_plug_display_point=>'BODY'
 ,p_location=>'WEB_SOURCE'
 ,p_web_src_module_id=>wwv_flow_api.id(156733630047645632)
-,p_query_type=>'SQL'
 ,p_plug_source_type=>'NATIVE_IR'
 ,p_plug_query_options=>'DERIVED_REPORT_COLUMNS'
 ,p_plug_caching=>'CACHE'
@@ -10677,14 +10676,6 @@ wwv_flow_api.create_worksheet_column(
 ,p_column_alignment=>'RIGHT'
 );
 wwv_flow_api.create_worksheet_column(
- p_id=>wwv_flow_api.id(29141395948312202)
-,p_db_column_name=>'GROUP_NAME'
-,p_display_order=>44
-,p_column_identifier=>'H'
-,p_column_label=>'Group Name'
-,p_column_type=>'STRING'
-);
-wwv_flow_api.create_worksheet_column(
  p_id=>wwv_flow_api.id(29141439233312203)
 ,p_db_column_name=>'APPLICATION_NAME'
 ,p_display_order=>54
@@ -10693,9 +10684,17 @@ wwv_flow_api.create_worksheet_column(
 ,p_column_type=>'STRING'
 );
 wwv_flow_api.create_worksheet_column(
+ p_id=>wwv_flow_api.id(213273431425514701)
+,p_db_column_name=>'APEX_USER'
+,p_display_order=>64
+,p_column_identifier=>'O'
+,p_column_label=>'Apex User'
+,p_column_type=>'STRING'
+);
+wwv_flow_api.create_worksheet_column(
  p_id=>wwv_flow_api.id(170063500551228902)
 ,p_db_column_name=>'CNT'
-,p_display_order=>64
+,p_display_order=>74
 ,p_column_identifier=>'J'
 ,p_column_label=>'Cnt'
 ,p_column_type=>'NUMBER'
@@ -10704,7 +10703,7 @@ wwv_flow_api.create_worksheet_column(
 wwv_flow_api.create_worksheet_column(
  p_id=>wwv_flow_api.id(170063632023228903)
 ,p_db_column_name=>'PAGE_NAME'
-,p_display_order=>74
+,p_display_order=>84
 ,p_column_identifier=>'K'
 ,p_column_label=>'Page Name'
 ,p_column_type=>'STRING'
@@ -10712,7 +10711,7 @@ wwv_flow_api.create_worksheet_column(
 wwv_flow_api.create_worksheet_column(
  p_id=>wwv_flow_api.id(170063975683228906)
 ,p_db_column_name=>'REQUESTS'
-,p_display_order=>84
+,p_display_order=>94
 ,p_column_identifier=>'N'
 ,p_column_label=>'Requests'
 ,p_column_type=>'STRING'
@@ -10720,7 +10719,7 @@ wwv_flow_api.create_worksheet_column(
 wwv_flow_api.create_worksheet_column(
  p_id=>wwv_flow_api.id(170063767730228904)
 ,p_db_column_name=>'ELAPSED_TIME'
-,p_display_order=>94
+,p_display_order=>104
 ,p_column_identifier=>'L'
 ,p_column_label=>'Elapsed Time'
 ,p_column_type=>'NUMBER'
@@ -10729,7 +10728,7 @@ wwv_flow_api.create_worksheet_column(
 wwv_flow_api.create_worksheet_column(
  p_id=>wwv_flow_api.id(170063869704228905)
 ,p_db_column_name=>'DURATION_MINS'
-,p_display_order=>104
+,p_display_order=>114
 ,p_column_identifier=>'M'
 ,p_column_label=>'Duration Mins'
 ,p_column_type=>'NUMBER'
@@ -10742,7 +10741,7 @@ wwv_flow_api.create_worksheet_rpt(
 ,p_report_alias=>'133638'
 ,p_status=>'PUBLIC'
 ,p_is_default=>'Y'
-,p_report_columns=>'APXWS_CC_002:LAST_LOGIN_DATE:APPLICATION_ID:PAGE_ID:GROUP_NAME:APPLICATION_NAME:CNT:PAGE_NAME:ELAPSED_TIME:DURATION_MINS:REQUESTS:IP_ADDRESS:AGENT:LOGIN_CNT:'
+,p_report_columns=>'APXWS_CC_002:LAST_LOGIN_DATE:APPLICATION_ID:PAGE_ID:APPLICATION_NAME:CNT:PAGE_NAME:ELAPSED_TIME:DURATION_MINS:REQUESTS:IP_ADDRESS:AGENT:LOGIN_CNT::APEX_USER'
 ,p_sort_column_1=>'0'
 ,p_sort_direction_1=>'DESC'
 ,p_sort_column_2=>'0'
@@ -13048,6 +13047,7 @@ unistr('					-- the rest access task may fail any time. So let\00B4s save what w
 '                    SUM(LOGIN_CNT) LOGIN_CNT, ',
 '                    APPLICATION_ID, PAGE_ID,',
 '                    MAX(APPLICATION_NAME) APPLICATION_NAME, ',
+'                    MAX(APEX_USER) APEX_USER, ',
 '                    IP_ADDRESS, ',
 '                    MAX(AGENT) AGENT, ',
 '                    MAX(PAGE_NAME) PAGE_NAME, ',
@@ -13063,9 +13063,11 @@ unistr('					-- the rest access task may fail any time. So let\00B4s save what w
 '            update set D.AGENT = S.AGENT, D.LOGIN_CNT = S.LOGIN_CNT, D.PAGE_NAME = S.PAGE_NAME, D.REQUESTS = S.REQUESTS, ',
 '                        D.ELAPSED_TIME = S.ELAPSED_TIME, D.DURATION_MINS = S.DURATION_MINS',
 '        when not matched then ',
-'            insert (D.WEB_MODULE_ID, D.LAST_LOGIN_DATE, D.LOGIN_CNT, D.APPLICATION_ID, D.PAGE_ID, D.APPLICATION_NAME, D.IP_ADDRESS, D.AGENT, ',
+'            insert (D.WEB_MODULE_ID, D.LAST_LOGIN_DATE, D.LOGIN_CNT, D.APPLICATION_ID, D.PAGE_ID, ',
+'            		D.APPLICATION_NAME, D.APEX_USER, D.IP_ADDRESS, D.AGENT, ',
 '                    D.PAGE_NAME, D.REQUESTS, D.CNT, D.ELAPSED_TIME, D.DURATION_MINS)',
-'            values (S.WEB_MODULE_ID, S.LAST_LOGIN_DATE, S.LOGIN_CNT, S.APPLICATION_ID, S.PAGE_ID, S.APPLICATION_NAME, S.IP_ADDRESS, S.AGENT, ',
+'            values (S.WEB_MODULE_ID, S.LAST_LOGIN_DATE, S.LOGIN_CNT, S.APPLICATION_ID, S.PAGE_ID, ',
+'            		S.APPLICATION_NAME, S.APEX_USER, S.IP_ADDRESS, S.AGENT, ',
 '                    S.PAGE_NAME, S.REQUESTS, S.CNT, S.ELAPSED_TIME, S.DURATION_MINS)',
 '        ;',
 '        if g_debug then',
@@ -13256,9 +13258,7 @@ unistr('					-- the rest access task may fail any time. So let\00B4s save what w
 '    end merge_local_source_call;',
 '',
 '    PROCEDURE merge_local_source (',
-'        p_app_id NUMBER DEFAULT NV(''APP_ID''),',
-'        p_page_id NUMBER DEFAULT NV(''APP_PAGE_ID''),',
-'        p_user_'))
+'        p_'))
 );
 end;
 /
@@ -13266,7 +13266,9 @@ begin
 wwv_flow_api.append_to_install_script(
  p_id=>wwv_flow_api.id(13384023613269440)
 ,p_script_clob=>wwv_flow_string.join(wwv_flow_t_varchar2(
-'name VARCHAR2 DEFAULT V(''APP_USER''),',
+'app_id NUMBER DEFAULT NV(''APP_ID''),',
+'        p_page_id NUMBER DEFAULT NV(''APP_PAGE_ID''),',
+'        p_user_name VARCHAR2 DEFAULT V(''APP_USER''),',
 '        p_geoloc_module_static_id VARCHAR2 DEFAULT ''IP_Geolocation''',
 '    )',
 '    is ',
